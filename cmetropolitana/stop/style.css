@@ -1,0 +1,290 @@
+:root {
+    --accent: #ffdd01;
+    --white: #f0f0f0;
+    --black: #000000;
+    --secondary: #d0d0d0; 
+    --route: #ececec;
+    --ontime: #3bb33b;
+    --delayed: #b33b3b;
+    --early: #b37b3b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--white);
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+}
+
+.ontime {
+    color: var(--ontime) !important;
+}
+
+.delayed {
+    color: var(--delayed) !important;
+}
+
+.early  {
+    color: var(--early) !important;
+}
+
+.scheduled {
+    color: #7f7f7f;
+}
+
+/*<div class="header">
+        <p class="stop">Parede - Carcavelos</p>
+        <div class="linhas">
+            <p class="line">1604</p>
+            <p class="line">1120</p>
+        </div>
+    </div>*/
+.contents {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+}
+
+.header {
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size:xx-large;
+    padding: 15px;
+    border-radius: 30px 30px 0px 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.line {
+    background-color: #000000;
+    color: white;
+    padding: 5px;
+    font-weight: bold;
+    width: 4em;
+    display: inline-block;
+    text-align: center; 
+    margin-right: 5px;
+    border-radius: 1em;
+}
+
+.info {
+    background-color: var(--accent);
+    padding: 15px;
+    font-family: sans-serif;
+    font-size:x-large;
+}
+
+.info2 {
+    background-color: var(--accent);
+    padding: 15px;
+    font-family: sans-serif;
+    font-size:x-large;
+    margin-bottom: 30px;
+    border-radius: 0px 0px 30px 30px;
+}
+
+.info p {
+    margin: 5px;
+}
+
+.departures {
+    background-color: var(--secondary);
+    padding: 15px;
+    margin-top: 0px;
+    border-radius: 0px 0px 30px 30px;
+}
+
+.departures p {
+    margin: 0px;
+    margin-bottom: 15px;
+    color: black;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 3em;
+}
+
+.services {
+    font-family: sans-serif;
+    text-align: center;
+    font-size: larger;
+}
+
+.prevTime {
+    text-decoration: line-through;
+    color: lightgrey;
+}
+
+.footer {
+    width: calc(100% -10px);
+    background-color: var(--accent);
+    font-family: sans-serif;
+    font-size: medium;
+    text-align: center;
+    color: #424242;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 6em;
+    padding: 5px;
+}
+
+.footer p {
+    margin: 0px 0;
+}
+
+.footer p a {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.service {
+    background-color: var(--white);
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 15px;
+    height: 5em;
+    transition: height 0.5s ease;
+}
+
+.serviceUpper, .serviceLower {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service .arrival {
+    font-size:xx-large;
+    text-align: right;
+    white-space: nowrap;
+    margin: 0px;
+}
+
+.service .dest {
+    font-size:xx-large;
+    text-align: left;
+    text-wrap:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0px;
+    margin-left: 5px;
+}
+
+.service .desc {
+    font-size:x-large;
+    text-align: left;
+    margin: 0px;
+    margin-left: 5px;
+}
+
+.service .delay {
+    font-size:x-large;
+    text-align: left;
+    margin: 0px;
+    margin-left: 5px;
+}
+
+.route {
+    background-color: var(--route);
+    transition: opacity 0.5s ease;
+    height: 0px;
+    border-radius: 0px;
+    margin: 0px;
+    padding: 0px;
+    height: 0px;
+    opacity: 0;
+    border-radius: 10px;
+}
+
+.route .routeTitle {
+    padding-top: 1em;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.stops {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 2em;
+    overflow: scroll;
+    padding: .5em;
+    overflow-x: hidden;
+    max-height: calc(100% - 3.75em);
+}
+
+.stops::before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: .5em;
+    width: 1em;
+    height: calc(var(--line-height, 100%) - 1.9em);
+    background-color: var(--pattern-color, #000000);
+    border-radius: 0.5em;
+    z-index: 0;
+}
+
+.stop {
+    margin-left: 2em;
+    position: relative;
+    text-align: left;
+    width: calc(100% - 2em);
+    z-index: 1; 
+}
+
+.stop p {
+    float: left;
+}
+
+.stop::before {
+    content: '';
+    width: .75em;
+    height: .75em;
+    background-color: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    left: -1.5em; /* This aligns the circle with the line */
+    top: 25%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.stop p {
+    font-family: sans-serif;
+    font-size: large;
+}
+
+.service.selected .route {
+    opacity: 1;
+    height: 18em;
+    transition: height 0.5s ease;
+}
+
+.service:hover {
+    filter: brightness(.95);
+    cursor:pointer;
+}
+
+.service.selected {
+    height: 23em;
+}
