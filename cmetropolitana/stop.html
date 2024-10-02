@@ -43,7 +43,7 @@
 
         document.body.onload = () => {
             let url = window.location.href.split("/")
-            let stopId = url[url.length-1]
+            let stopId = url[url.length - 1]
             fetch("https://api.carrismetropolitana.pt/stops/" + stopId).then(async r => {
                 document.querySelector("link[rel*='icon']").href = "/cm-icon.png";
                 if (!r.ok) return window.location.href = "/cmetropolitana/not-found"
@@ -123,10 +123,10 @@
                     delay = "Planeado"
                 }
                 arrival += "<span class=\"" + arrivalSpan + "\">" + (bus.estimated_arrival ? bus.estimated_arrival.split(":").slice(0, -1).join(":") : bus.scheduled_arrival.split(":").slice(0, -1).join(":")) + "</span>";
-                arrival = arrival.replace("24:", "(+1) 00:").replace("25:", "(+1) 01:")
+                arrival = arrival.replaceAll("24:", "(+1) 00:").replaceAll("25:", "(+1) 01:")
                 let div = document.createElement("div")
                 div.classList.add("service")
-                div.setAttribute("trip-id", bus.trip_id)
+                div.setAttribute("trip-id", bus.trip_id + "&" + bus.stop_sequence)
                 div.setAttribute("route-id", bus.pattern_id)
                 div.setAttribute("stop-sequence", bus.stop_sequence)
                 if (bus.vehicle_id === selectedVec) {
@@ -142,13 +142,12 @@
                         div.classList.add("selected")
                         prevSelected = div;
                         selectedVec = bus.vehicle_id
-                        if (!div.getAttribute("loaded")) {
-                            loadRoute(div)
-                        }
+                        if(document.getElementById("currentStop")) document.getElementById("currentStop").removeAttribute("id")
+                        loadRoute(div)
                     }
                 }
 
-                div.innerHTML = "<div class=\"serviceUpper\"><p class=\"dest\"><span class=\"line\" style=\"background-color: " + colorCache[bus.line_id] + "\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p></div><div class=\"serviceLower\"><p class=\"desc\">" + (getVehicle(bus.vehicle_id) !== "Desconhecido" ? "Tipo de veículo: <strong>" + getVehicle(bus.vehicle_id) + "</strong>" : "") + "</p><p class=\"delay\">" + delay + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "\"></div></div>"
+                div.innerHTML = "<div class=\"serviceUpper\"><p class=\"dest\"><span class=\"line\" style=\"background-color: " + colorCache[bus.line_id] + "\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p></div><div class=\"serviceLower\"><p class=\"desc\">" + (getVehicle(bus.vehicle_id) !== "Desconhecido" ? "Tipo de veículo: <strong>" + getVehicle(bus.vehicle_id) + "</strong>" : "") + "</p><p class=\"delay\">" + delay + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div></div>"
                 document.getElementById("services").appendChild(div)
             });
             if (res.length === 0) document.getElementById("services").innerHTML = "Não existem serviços para este dia."
@@ -164,13 +163,13 @@
 
         async function loadRoute(div) {
             div.setAttribute("loaded", true)
-            fetch("../patterns/" + div.getAttribute("route-id") + ".json").then(r => r.json()).then(async r => {
+            fetch("../patterns/" + div.getAttribute("route-id").split("&")[0] + ".json").then(r => r.json()).then(async r => {
                 let stopsDiv = document.getElementById("stops-" + div.getAttribute("trip-id"))
                 let routeDiv = document.getElementById("route-" + div.getAttribute("trip-id"))
                 routeDiv.innerHTML = "<p class=\"routeTitle\">" + r.long_name + "</p>";
                 routeDiv.appendChild(stopsDiv)
                 if (!stopsDiv) alert("FAILED")
-                let route = routeCache.find(a => a.trip_id === div.getAttribute("trip-id"))
+                let route = routeCache.find(a => a.trip_id + "&" + a.stop_sequence === div.getAttribute("trip-id"))
                 let time = route.estimated_arrival || route.scheduled_arrival;
                 let time2 = route.scheduled_arrival.split(":");
                 time = time.split(":")
@@ -179,23 +178,23 @@
                 let h2 = parseInt(time2[0])
                 let m2 = parseInt(time2[1])
                 let eta = route.estimated_arrival_unix;
+                let stop_sequence = parseInt(div.getAttribute("stop-sequence"))
                 let delay = (route.estimated_arrival_unix || 0) - route.scheduled_arrival_unix
                 delay = Math.floor(delay / 60) * 60
                 r.path.forEach(stop => {
                     stopDiv = document.createElement("div")
                     let arrival = "";
-
-                    if (stop.index < route.stop_sequence) {
+                    if (stop.index < stop_sequence) {
                         arrival = ""
-                    } else if (stop.index === route.stop_sequence) {
+                    } else if (stop.index === stop_sequence) {
                         let arrivalSpan;
                         if (delay === 0 && route.estimated_arrival) {
                             arrivalSpan = "ontime";
-                        } else {
+                        } else if(route.estimated_arrival) {
                             arrivalSpan = delay < 0 ? "early" : "delayed"
-                            arrival = arrival + "<span class=\"prevTime\">" + (h2 < 10 ? "0" + h2 : (h2 > 23 ? ("(+1) 0" + (h2-24)) : h2)) + ":" + (m2 < 10 ? "0" + m2 : m2) + "</span> "
+                            arrival = arrival + "<span class=\"prevTime\">" + (h2 < 10 ? "0" + h2 : (h2 > 23 ? ("(+1) 0" + (h2 - 24)) : h2)) + ":" + (m2 < 10 ? "0" + m2 : m2) + "</span> "
                         }
-                        arrival = arrival + "<span class=\"" + arrivalSpan + "\">" + (h < 10 ? "0" + h : (h > 23 ? ("(+1) 0" + (h-24)) : h)) + ":" + (m < 10 ? "0" + m : m) + "</span> | "
+                        arrival = arrival + "<span class=\"" + arrivalSpan + "\">" + (h < 10 ? "0" + h : (h > 23 ? ("(+1) 0" + (h - 24)) : h)) + ":" + (m < 10 ? "0" + m : m) + "</span> | "
                         stopDiv.id = "currentStop"
                     } else {
                         m += stop.schedule.travel_time
@@ -211,11 +210,11 @@
                         let arrivalSpan;
                         if (delay === 0 && route.estimated_arrival) {
                             arrivalSpan = "ontime";
-                        } else {
+                        } else if(route.estimated_arrival) {
                             arrivalSpan = delay < 0 ? "early" : "delayed"
-                            arrival = arrival + "<span class=\"prevTime\">" + (h2 < 10 ? "0" + h2 : (h2 > 23 ? ("(+1) 0" + (h2-24)) : h2)) + ":" + (m2 < 10 ? "0" + m2 : m2) + "</span> "
+                            arrival = arrival + "<span class=\"prevTime\">" + (h2 < 10 ? "0" + h2 : (h2 > 23 ? ("(+1) 0" + (h2 - 24)) : h2)) + ":" + (m2 < 10 ? "0" + m2 : m2) + "</span> "
                         }
-                        arrival = arrival + "<span class=\"" + arrivalSpan + "\">" + (h < 10 ? "0" + h : (h > 23 ? ("(+1) 0" + (h-24)) : h)) + ":" + (m < 10 ? "0" + m : m) + "</span> | "
+                        arrival = arrival + "<span class=\"" + arrivalSpan + "\">" + (h < 10 ? "0" + h : (h > 23 ? ("(+1) 0" + (h - 24)) : h)) + ":" + (m < 10 ? "0" + m : m) + "</span> | "
                     }
                     stopDiv.innerHTML = "<p>" + arrival + stop.name + "</p>"
                     stopDiv.classList.add("stop")
@@ -227,8 +226,7 @@
                 stopsDiv.style.setProperty('--pattern-color', r.color);
                 document.getElementById("currentStop").scrollIntoView({
                     behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'nearest'
+                    block: 'nearest'
                 });
 
             })
