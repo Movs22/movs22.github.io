@@ -66,8 +66,8 @@
                     await fetchBuses(stopId)
                 }, 60 * 1000)
             }).catch(error => {
-		console.log(error)
-                //window.location.href = "/cmetropolitana/not-found"
+		        console.log(error)
+                window.location.href = "/cmetropolitana/not-found"
             });
         }
 
@@ -81,11 +81,11 @@
             routeCache = null;
             let now = Date.now() / 1000
             let res = await fetch("https://api.carrismetropolitana.pt/stops/" + id + "/realtime").then(r => r.json())
-            res = res.filter(a => (a.estimated_arrival_unix > (now) || a.scheduled_arrival_unix > (now)) && !a.observed_arrival_unix)
+            res = res.filter(a => (a.estimated_arrival_unix > (now-30*60) || a.scheduled_arrival_unix > (now-30*60)) && !a.observed_arrival_unix)
 		
             res.sort((a, b) => (a.estimated_arrival_unix ? a.estimated_arrival_unix : a.scheduled_arrival_unix) - (b.estimated_arrival_unix ? b.estimated_arrival_unix : b.scheduled_arrival_unix))
 
-            res = res.slice(0, 25)
+            res = res.slice(0, 60)
 
 	    for(let b in res) {
 	    	let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => r.json())
@@ -97,9 +97,9 @@
 			let vehicle = vehicles.find(a => a.trip_id === bus.trip_id)
 			if(vehicle) {
 				let route = patternsCache[vehicle.pattern_id]
-console.log(route)
 				let rS = route.path.indexOf(route.path.find(a => a.id === vehicle.stop_id))
 				let rE = route.path.indexOf(route.path.find(a => a.id === id && a.index === bus.stop_sequence))
+                if(rE < rS) bus.observed_arrival_unix = Date.now()
 				let section = route.path.filter(a => route.path.indexOf(a) >= rS && route.path.indexOf(a) <= rE)
 				let time = 0;
 				section.forEach(arr => time += arr.schedule.travel_time)
@@ -112,6 +112,8 @@ console.log(route)
 		}
 	    })
 	
+        res = res.filter(a => (a.estimated_arrival_unix > (now) || a.scheduled_arrival_unix > (now)) && !a.observed_arrival_unix)
+        res = res.slice(0, 25)
 	    res.sort((a, b) => (a.estimated_arrival_unix ? a.estimated_arrival_unix : a.scheduled_arrival_unix) - (b.estimated_arrival_unix ? b.estimated_arrival_unix : b.scheduled_arrival_unix))
 
             routeCache = res;
@@ -180,7 +182,8 @@ console.log(route)
 		    selectedVec = bus.trip_id + "&" + bus.stop_sequence
                     if(document.getElementById("currentStop")) document.getElementById("currentStop").removeAttribute("id")
                     div.classList.add("selected"); 
-    		    loadRoute(div)
+                    prevSelected = div;
+    		        loadRoute(div)
                 }
             });
             if (res.length === 0) document.getElementById("services").innerHTML = "Não existem serviços para este dia."
@@ -195,7 +198,8 @@ console.log(route)
         }
 
         async function loadRoute(div) {
-            div.setAttribute("loaded", true)
+            if(div.getAttribute("loaded")) return;
+            div.setAttribute("loaded", "true")
             r = patternsCache[div.getAttribute("route-id")]
                 let stopsDiv = document.getElementById("stops-" + div.getAttribute("trip-id"))
                 let routeDiv = document.getElementById("route-" + div.getAttribute("trip-id"))
@@ -214,7 +218,7 @@ console.log(route)
                 let stop_sequence = parseInt(div.getAttribute("stop-sequence"))
                 let delay = (route.estimated_arrival_unix || 0) - route.scheduled_arrival_unix
                 delay = Math.floor(delay / 60) * 60
-                r.path.forEach(stop => {
+                await r.path.forEach(stop => {
                     stopDiv = document.createElement("div")
                     let arrival = "";
                     if (stop.index < stop_sequence) {
