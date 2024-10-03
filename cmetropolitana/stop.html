@@ -39,6 +39,8 @@
 
         let colorCache = {}
 
+	let patternsCache = {};
+
         let routeCache = {};
 
         document.body.onload = () => {
@@ -58,13 +60,14 @@
                     colorCache[line] = a.color;
                 }
                 document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Todos os dados apresentados foram obtidos através da <a href=\"https://github.com/carrismetropolitana/api\">API da Carris Metropolitana</a>.</p>"
-
+		
                 await fetchBuses(stopId)
                 interval = setInterval(async () => {
                     await fetchBuses(stopId)
                 }, 60 * 1000)
             }).catch(error => {
-                window.location.href = "/cmetropolitana/not-found"
+		console.log(error)
+                //window.location.href = "/cmetropolitana/not-found"
             });
         }
 
@@ -74,14 +77,42 @@
         let selectedVec;
 
         async function fetchBuses(id) {
+	    let vehicles = await fetch("https://api.carrismetropolitana.pt/vehicles").then(r => r.json())
             routeCache = null;
             let now = Date.now() / 1000
             let res = await fetch("https://api.carrismetropolitana.pt/stops/" + id + "/realtime").then(r => r.json())
             res = res.filter(a => (a.estimated_arrival_unix > (now) || a.scheduled_arrival_unix > (now)) && !a.observed_arrival_unix)
-
+		
             res.sort((a, b) => (a.estimated_arrival_unix ? a.estimated_arrival_unix : a.scheduled_arrival_unix) - (b.estimated_arrival_unix ? b.estimated_arrival_unix : b.scheduled_arrival_unix))
 
             res = res.slice(0, 25)
+
+	    for(let b in res) {
+	    	let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => r.json())
+		patternsCache[res[b].pattern_id] = p;
+	    }
+
+	    res.forEach(bus => {
+	    	if(!bus.estimated_arrival) {
+			let vehicle = vehicles.find(a => a.trip_id === bus.trip_id)
+			if(vehicle) {
+				let route = patternsCache[vehicle.pattern_id]
+console.log(route)
+				let rS = route.path.indexOf(route.path.find(a => a.id === vehicle.stop_id))
+				let rE = route.path.indexOf(route.path.find(a => a.id === id && a.index === bus.stop_sequence))
+				let section = route.path.filter(a => route.path.indexOf(a) >= rS && route.path.indexOf(a) <= rE)
+				let time = 0;
+				section.forEach(arr => time += arr.schedule.travel_time)
+				if(rS > 0) {
+					bus.estimated_arrival_unix = vehicle.timestamp + time*60;
+					bus.estimated_arrival = (new Date(bus.estimated_arrival_unix * 1000).toTimeString().split(' ')[0])
+				}
+				bus.vehicle_id = vehicle.id
+			}
+		}
+	    })
+	
+	    res.sort((a, b) => (a.estimated_arrival_unix ? a.estimated_arrival_unix : a.scheduled_arrival_unix) - (b.estimated_arrival_unix ? b.estimated_arrival_unix : b.scheduled_arrival_unix))
 
             routeCache = res;
 
@@ -94,7 +125,6 @@
                 let delay = "";
 
                 let arrivalSpan = "scheduled";
-
                 if (bus.estimated_arrival) {
                     let dif = bus.estimated_arrival_unix - Date.now() / 1000
                     dif = Math.floor(dif / 60)
@@ -129,9 +159,6 @@
                 div.setAttribute("trip-id", bus.trip_id + "&" + bus.stop_sequence)
                 div.setAttribute("route-id", bus.pattern_id)
                 div.setAttribute("stop-sequence", bus.stop_sequence)
-                if (bus.vehicle_id === selectedVec) {
-                    div.classList.add("selected"); loadRoute(div)
-                }
                 div.onclick = () => {
                     if (div.classList.contains("selected")) {
                         div.classList.remove("selected");
@@ -141,7 +168,7 @@
                         prevSelected ? prevSelected.classList.remove("selected") : null
                         div.classList.add("selected")
                         prevSelected = div;
-                        selectedVec = bus.vehicle_id
+                        selectedVec = bus.trip_id + "&" + bus.stop_sequence
                         if(document.getElementById("currentStop")) document.getElementById("currentStop").removeAttribute("id")
                         loadRoute(div)
                     }
@@ -149,6 +176,12 @@
 
                 div.innerHTML = "<div class=\"serviceUpper\"><p class=\"dest\"><span class=\"line\" style=\"background-color: " + colorCache[bus.line_id] + "\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p></div><div class=\"serviceLower\"><p class=\"desc\">" + (getVehicle(bus.vehicle_id) !== "Desconhecido" ? "Tipo de veículo: <strong>" + getVehicle(bus.vehicle_id) + "</strong>" : "") + "</p><p class=\"delay\">" + delay + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div></div>"
                 document.getElementById("services").appendChild(div)
+ if (bus.trip_id + "&" + bus.stop_sequence === selectedVec) {
+		    selectedVec = bus.trip_id + "&" + bus.stop_sequence
+                    if(document.getElementById("currentStop")) document.getElementById("currentStop").removeAttribute("id")
+                    div.classList.add("selected"); 
+    		    loadRoute(div)
+                }
             });
             if (res.length === 0) document.getElementById("services").innerHTML = "Não existem serviços para este dia."
         }
@@ -163,7 +196,7 @@
 
         async function loadRoute(div) {
             div.setAttribute("loaded", true)
-            fetch("../patterns/" + div.getAttribute("route-id").split("&")[0] + ".json").then(r => r.json()).then(async r => {
+            r = patternsCache[div.getAttribute("route-id")]
                 let stopsDiv = document.getElementById("stops-" + div.getAttribute("trip-id"))
                 let routeDiv = document.getElementById("route-" + div.getAttribute("trip-id"))
                 routeDiv.innerHTML = "<p class=\"routeTitle\">" + r.long_name + "</p>";
@@ -229,7 +262,7 @@
                     block: 'nearest'
                 });
 
-            })
+          
         }
     </script>
 </body>
