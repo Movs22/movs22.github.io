@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Redirecting...</title>
     <script>
-        const path = window.location.pathname;
+        path = window.location.pathname;
         if (path.startsWith("/cmetropolitana/stop/")) {
             history.pushState(null, '', path);
 
@@ -21,10 +21,16 @@
                 });
         } else {
             history.pushState(null, '', path);
-
+            
             fetch(path + ".html")
-                .then(response => response.text())
+                .then(response => { if(!response.ok) {
+                    document.body.innerHTML = "<h1>Failed to load page</h1>";
+                    console.error('Error loading ' + path + '.html.');
+                    return null;
+                } else return response })
+                .then(response => response ? response.text() : undefined)
                 .then(html => {
+                    if(!html) return
                     document.open();
                     document.write(html);
                     document.close();

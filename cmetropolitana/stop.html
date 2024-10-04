@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N4D2MS3MLF"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -17,6 +16,11 @@
 </head>
 
 <body>
+    <div id="cookie-banner">
+        <p>Este site utiliza cookies para recolha de estatísticas, de forma anónima.<br>Aceita a utilização de cookies para este fim?</p>
+            <button id="accept-cookies">Aceitar</button>
+            <button id="decline-cookies">Recusar</button>
+    </div>
     <div class="contents">
         <div class="header" id="header">
             <strong>{STOP.NAME}</strong>
@@ -26,6 +30,8 @@
             <strong>Concelho: </strong>{STOP.MUNICIPALITY}
             <p>Todos os dados apresentados foram obtidos através da <a
                     href="https://github.com/carrismetropolitana/api">API da Carris Metropolitana</a>.</p>
+                    <p>Para saber mais sobre este site, clique <a
+                        href="/carrismetropolitana/">aqui</a>.</p>
         </div>
         <div class="departures">
             <p><strong>Próximos autocarros:</strong></p>
@@ -34,6 +40,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Cookie Banner -->
+    <script>
+        const banner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
+        const declineButton = document.getElementById('decline-cookies');
+
+        // Check if cookies have already been accepted
+        const hasConsent = localStorage.getItem('cookieConsent');
+
+        if (hasConsent === 'true') {
+            loadGoogleAnalytics();
+            banner.style.display = 'none';
+        } else if (hasConsent === 'false') {
+            banner.style.display = 'none';
+        }
+
+        // Event listeners for the buttons
+        acceptButton.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'true');
+            banner.style.display = 'none';
+            loadGoogleAnalytics();
+        });
+
+        declineButton.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'false');
+            banner.style.display = 'none';
+        });
+
+        // Load Google Analytics only with consent
+        function loadGoogleAnalytics() {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-N4D2MS3MLF';
+            document.head.appendChild(script);
+
+            script.onload = () => {
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-N4D2MS3MLF');
+            };
+        }
+    </script>
+
     <script>
         let interval;
 
@@ -59,7 +110,7 @@
                     lines = lines + "<span class=\"line\" style=\"background-color: " + a.color + "\">" + line + "</span>"
                     colorCache[line] = a.color;
                 }
-                document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Todos os dados apresentados foram obtidos através da <a href=\"https://github.com/carrismetropolitana/api\">API da Carris Metropolitana</a>.</p>"
+                document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Todos os dados apresentados foram obtidos através da <a href=\"https://github.com/carrismetropolitana/api\">API da Carris Metropolitana</a>.</p><p>Para saber mais sobre este site, clique <a href=\"/cmetropolitana/\">aqui</a>.</p>"
 		
                 await fetchBuses(stopId)
                 interval = setInterval(async () => {
@@ -88,6 +139,7 @@
             res = res.slice(0, 60)
 
 	    for(let b in res) {
+            if(patternsCache[res[b].pattern_id]) continue;
 	    	let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => r.json())
 		patternsCache[res[b].pattern_id] = p;
 	    }
