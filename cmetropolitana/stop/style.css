@@ -69,18 +69,30 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 1.5;
+}
+
+.header strong {
+    margin: 0px;
+}
+
+.header img {
+    color: white;
+    height: 1.5em;
+    vertical-align: middle;
+    margin-right: .5em;
 }
 
 .line {
     background-color: #000000;
     color: white;
-    padding: 5px;
+    padding: .25em;
     font-weight: bold;
     width: 4em;
     display: inline-block;
     text-align: center; 
     margin-right: 5px;
-    border-radius: 1em;
+    border-radius: 2em;
 }
 
 .info {
@@ -226,19 +238,19 @@ body {
     flex-direction: column;
     align-items: flex-start;
     padding-left: 2em;
-    overflow: scroll;
     padding: .5em;
     overflow-x: hidden;
     max-height: calc(100% - 3.75em);
+    overflow-y: auto;
 }
 
 .stops::before {
     content: '';
     position: absolute;
     display: block;
-    top: .5em;
+    top: 1.25em;
     width: 1em;
-    height: calc(var(--line-height, 100%) - 1.9em);
+    height: calc(var(--line-height, 100%) - 2.5em);
     background-color: var(--pattern-color, #000000);
     border-radius: 0.5em;
     z-index: 0;
@@ -296,26 +308,90 @@ body {
     margin-left: 2em;
     position: relative;
     text-align: left;
-    width: calc(100% - 2em);
+    width: calc(100% - 2em - 10px);
     z-index: 1; 
-}
-
-.stop p {
-    float: left;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    min-height: 2.5em;
+    padding: 1.25em 0;
+    justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 .stop::before {
     content: '';
-    width: .75em;
-    height: .75em;
+    width: .6em;
+    height: .6em;
     background-color: #ffffff;
     border-radius: 50%;
     position: absolute;
     left: -1.5em; /* This aligns the circle with the line */
-    top: 25%;
+    top: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
 }
+
+.stop.selectedStop::before {
+    content: '';
+    width: .8em;
+    height: .8em;
+    background-color: #ffffff;
+    border-color: #000000;
+    border-style:solid;
+    border-width: .2em;
+    border-radius: 50%;
+    position: absolute;
+    left: -1.5em; /* This aligns the circle with the line */
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.stop.selectedStop {
+    font-weight: bold;
+}
+
+.stop.approaching::before, .stop.approaching::after {
+    content: '';
+    width: .6em;
+    height: .6em;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    left: -1.5em; /* This aligns the circle with the line */
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.stop.approaching::before {
+    animation: grow-fade-out 1s infinite; /* Animation for the growing circle */
+}
+
+
+@keyframes grow-fade-out {
+    0% {
+        transform: translate(-50%, -50%) scale(1); /* Normal size */
+        opacity: 1; /* Fully visible */
+    }
+    
+    99.8% {
+        transform: translate(-50%, -50%) scale(3); /* Back to normal */
+        opacity: 0; /* Remain invisible */
+    }
+
+    99.9% {
+        transform: translate(-50%, -50%) scale(3); /* Back to normal */
+        opacity: 0; /* Remain invisible */
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1); /* Back to normal */
+        opacity: 1; /* Remain invisible */
+    }
+}
+
 
 .info a {
     color: var(--black);
@@ -332,6 +408,12 @@ body {
 .stop p {
     font-family: sans-serif;
     font-size: large;
+    float: left;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing content */
+    text-overflow: ellipsis; /* Show ellipsis for overflowing text */
+    max-width: 100%; /* Ensure it fits within the parent width */
+    margin: 0; /* Reset margin */
 }
 
 .service.selected .route {
