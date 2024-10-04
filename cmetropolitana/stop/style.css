@@ -204,14 +204,14 @@ body {
 
 .route {
     background-color: var(--route);
-    transition: opacity 0.5s ease;
-    height: 0px;
     border-radius: 0px;
     margin: 0px;
     padding: 0px;
     height: 0px;
     opacity: 0;
+    max-height: 0em;
     border-radius: 10px;
+    transition: all 0.5s ease;
 }
 
 .route .routeTitle {
@@ -243,6 +243,54 @@ body {
     border-radius: 0.5em;
     z-index: 0;
 }
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 2em 1.5em;
+    text-align: center;
+    font-size: 1.5em;
+    font-family: sans-serif;
+    font-weight: bold;
+    z-index: 9999;
+  }
+
+  #cookie-banner p {
+    margin: 0 0 1em;
+    line-height: 1.5;
+  }
+
+  #cookie-banner button {
+    background-color: var(--accent);
+    border: none;
+    color: white;
+    padding: 0.8em 1.5em;
+    font-size: 1.2em;
+    border-radius: 0.5em;
+    cursor: pointer;
+    margin: 0 0.5em;
+    transition: background-color 0.3s ease;
+  }
+
+  #cookie-banner button:hover {
+    background-color: var(--accent);
+    filter: brightness(.85);
+  }
+
+  @media (max-width: 600px) {
+    #cookie-banner {
+      font-size: 1em;
+      padding: 1.5em 1em;
+    }
+
+    #cookie-banner button {
+      font-size: 1em;
+      padding: 0.7em 1.2em;
+    }
+  }
 
 .stop {
     margin-left: 2em;
@@ -269,6 +317,18 @@ body {
     z-index: 1;
 }
 
+.info a {
+    color: var(--black);
+    font-weight: bold;
+    font-style: italic;
+}
+
+.info a:hover {
+    color: #003f7f;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .stop p {
     font-family: sans-serif;
     font-size: large;
@@ -277,8 +337,10 @@ body {
 .service.selected .route {
     opacity: 1;
     height: 18em;
-    transition: height 0.5s ease;
+    max-height: 18em;
+    transition: all 0.5s ease;
 }
+
 
 .service:hover {
     filter: brightness(.95);
