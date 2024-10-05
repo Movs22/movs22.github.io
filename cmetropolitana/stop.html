@@ -299,7 +299,6 @@
             await r.path.forEach(stop => {
                 stopDiv = document.createElement("div")
                 let arrival = "";
-                console.log(stop.index)
                 if (stop.index - 1 < (current_stop > -1 ? current_stop - 1 : stop_sequence - 1)) {
                     arrival = ""
                 } else {
