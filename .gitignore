@@ -1,0 +1,2 @@
+# This folder contains json downloads of the /vehicles and /stops/X/realtime endpoints, used during debugging on localhost. 
+/data*
