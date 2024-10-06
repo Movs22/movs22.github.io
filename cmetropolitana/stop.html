@@ -406,8 +406,10 @@
             time = time.split(":")
             let h = parseInt(time[0])
             let m = parseInt(time[1])
+            if(h < 4) h += 24;
             let h2 = parseInt(time2[0])
             let m2 = parseInt(time2[1])
+            if(h2 < 4) h2 += 24;
             let eta = route.estimated_arrival_unix;
             let stop_sequence = parseInt(div.getAttribute("stop-sequence"))
             let current_stop = r.path.indexOf(r.path.find(a => a.id === div.getAttribute("current-stop"))) + 1
@@ -427,6 +429,7 @@
                 m2 += 60;
                 h2--;
             }
+
 
             await r.path.forEach(stop => {
                 stopDiv = document.createElement("div")
