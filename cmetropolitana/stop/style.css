@@ -19,6 +19,20 @@ html, body {
     height: 100%;
 }
 
+.marker {
+    position: relative;
+}
+
+.marker2 {
+    position: absolute;
+    top: 50%;   
+    left: 50%;
+}
+
+.marker2 svg {
+    z-index: 100000;
+}
+
 body {
     background-color: var(--white);
     margin: 0px;
@@ -43,13 +57,6 @@ body {
     color: #7f7f7f;
 }
 
-/*<div class="header">
-        <p class="stop">Parede - Carcavelos</p>
-        <div class="linhas">
-            <p class="line">1604</p>
-            <p class="line">1120</p>
-        </div>
-    </div>*/
 .contents {
     flex: 1;
     margin: 10px;
@@ -84,8 +91,8 @@ body {
 }
 
 .line {
-    background-color: #000000;
-    color: white;
+    background-color: #ff00ff;
+    color: black;
     padding: .25em;
     font-weight: bold;
     width: 4em;
@@ -186,6 +193,7 @@ body {
     font-size:xx-large;
     text-align: right;
     white-space: nowrap;
+    font-weight: bold;
     margin: 0px;
 }
 
@@ -226,6 +234,14 @@ body {
     transition: all 0.5s ease;
 }
 
+.routePattern {
+    display: flex;
+    border-radius: 0px;
+    max-height: 0em;
+    border-radius: 10px;
+    transition: all 0.5s ease;
+}
+
 .route .routeTitle {
     padding-top: 1em;
     font-size: larger;
@@ -240,8 +256,50 @@ body {
     padding-left: 2em;
     padding: .5em;
     overflow-x: hidden;
-    max-height: calc(100% - 3.75em);
+    width: 50%;
+    max-height: calc(100%);
     overflow-y: auto;
+    float: left;
+}
+
+.map {
+    background-color: white;
+    float: right;
+    overflow: hidden;
+    height: 0;
+    transition: height 0.3s;
+    width: calc(50% - .5em);
+    border-radius: .5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stopBlob {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-width: 3px;
+    border-color: #000000;
+    border-style: solid;
+    border-radius: 50%;
+    transform-origin: center;
+    transition: transform 0.2s ease;
+}
+
+.zoom-8, .zoom-7, .zoom-6 .stopBlob {
+    border-color: red;
+}
+
+.service.selected .routePattern .map {
+    height: 23em;
+}
+
+.arrow-marker {
+    fill: none;
+    stroke: #000000;
+    stroke-width: 3;
+    marker-end: url(#arrowhead);
 }
 
 .stops::before {
@@ -352,7 +410,7 @@ body {
     font-weight: bold;
 }
 
-.stop.approaching::before, .stop.approaching::after {
+.stop.approaching::after {
     content: '';
     width: .6em;
     height: .6em;
@@ -365,7 +423,7 @@ body {
     z-index: 1;
 }
 
-.stop.approaching::before {
+.stop.approaching::after {
     animation: grow-fade-out 1s infinite; /* Animation for the growing circle */
 }
 
@@ -420,6 +478,13 @@ body {
     opacity: 1;
     height: 18em;
     max-height: 18em;
+    transition: all 0.5s ease;
+}
+
+.service.selected .routePattern {
+    opacity: 1;
+    height: 14.25em;
+    max-height: 14.25em;
     transition: all 0.5s ease;
 }
 
