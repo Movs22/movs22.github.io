@@ -2,15 +2,8 @@
 <html>
 
 <head>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-N4D2MS3MLF');
-    </script>
     <meta charset="UTF-8">
-    <link href="stop/style.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
     <title>Horários em tempo real - O que é?</title>
     <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
     <style>
@@ -66,16 +59,11 @@
 </head>
 
 <body>
-    <div id="cookie-banner">
-        <p>Este site utiliza cookies para recolha de estatísticas, de forma anónima.<br>Aceita a utilização de cookies
-            para este fim?</p>
-        <button id="accept-cookies">Aceitar</button>
-        <button id="decline-cookies">Recusar</button>
+    <div class="spacer"></div>
+    <div class="header" id="header">
+        <strong>Horários em Tempo Real</strong>
     </div>
-    <div class="contents">
-        <div class="header" id="header">
-            <strong>Horários em Tempo Real</strong>
-        </div>
+    <div class="contents" id="contents">
         <div class="info" id="info">
             Este site foi criado por um estudante da AML, <strong>com o objetivo de permitir a visualização dos
                 autocarros em tempo real</strong>, em qualquer paragem, de forma prática, simples e sem quaisquer
@@ -104,50 +92,19 @@
             </div>
         </div>
     </div>
-
-    <!-- Cookie Banner -->
-    <script>
-        const banner = document.getElementById('cookie-banner');
-        const acceptButton = document.getElementById('accept-cookies');
-        const declineButton = document.getElementById('decline-cookies');
-
-        // Check if cookies have already been accepted
-        const hasConsent = localStorage.getItem('cookieConsent');
-
-        if (hasConsent === 'true') {
-            loadGoogleAnalytics();
-            banner.style.display = 'none';
-        } else if (hasConsent === 'false') {
-            banner.style.display = 'none';
-        }
-
-        // Event listeners for the buttons
-        acceptButton.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'true');
-            banner.style.display = 'none';
-            loadGoogleAnalytics();
-        });
-
-        declineButton.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'false');
-            banner.style.display = 'none';
-        });
-
-        // Load Google Analytics only with consent
-        function loadGoogleAnalytics() {
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-N4D2MS3MLF';
-            document.head.appendChild(script);
-
-            script.onload = () => {
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-N4D2MS3MLF');
-            };
-        }
-    </script>
+    <div class="search">
+        <div class="autocomplete hidden" id="autocomplete"></div>
+        <input type="text" class="searchInput hidden" id="searchInput" placeholder="Escolha uma paragem"></input>
+        <div class="searchBtn" id="searchButton"><svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            width="24" 
+            height="24" 
+            fill="currentColor">
+            <path d="M10.5 2a8.5 8.5 0 1 0 6.314 14.267l5.404 5.404a1 1 0 0 0 1.415-1.415l-5.404-5.404A8.5 8.5 0 0 0 10.5 2zm0 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13z"/>
+        </svg></div>
+    </div>
+    <script src="/stop/search.js"></script>
 
     <script>
         let faq = {
