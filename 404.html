@@ -8,7 +8,7 @@
         if (path.startsWith("/cmetropolitana/stop/")) {
             history.pushState(null, '', path);
 
-            fetch('/cmetropolitana/stop.html')
+            fetch('/cmetropolitana/stop/index.html')
                 .then(response => response.text())
                 .then(html => {
                     document.open();

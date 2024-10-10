@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /assets/
+Disallow: /cmetropolitana/patterns/
+Disallow: /cmetropolitana/shapes/
+Disallow: /cmetropolitana/sounds/

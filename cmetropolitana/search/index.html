@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <link href="/cmetropolitana/style.css" rel="stylesheet">
+    <title>Horários em tempo real - Pesquisa</title>
+    <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
+</head>
+<body>
+    <div class="contents">
+        <div class="header" id="header">
+            <strong>Pesquisar</strong>
+        </div>
+        <div class="info" id="info">
+            <label>Seleciona uma paragem:</label><select id="stopSel"></select><br>
+            <strong>Linhas: </strong>{STOP.LINES}<br>
+            <strong>Concelho: </strong>{STOP.MUNICIPALITY}
+<p>Todos os dados apresentados foram obtidos através da <a href="https://github.com/carrismetropolitana/api">API da Carris Metropolitana</a>.</p>
+            <p>Para saber mais sobre este site, clique <a href="/carrismetropolitana/">aqui</a>.</p>
+        </div>
+        <div class="departures">
+            <p><strong>Próximos autocarros:</strong></p>
+            <div class="services" id="services">
+                Carregando...
+            </div>
+        </div>
+    </div>
+    <script>
+        document.body.onload = async () => {
+            let debug = false;
+
+            debug = window.location.host === "localhost:8080"
+            if(!debug) window.location.href = "/cmetropolitana/not-found"
+            let stops = await fetch("/cmetropolitana/stops.json").then(r => r.json())
+            let dropDown = document.getElementById("stopSel")
+            stops.forEach(element => {
+                let el = document.createElement("option")
+                el.innerHTML = element.name;
+                dropDown.appendChild(el)
+            });
+        }
+    </script>
+
+    
+</body>
+
+</html>
