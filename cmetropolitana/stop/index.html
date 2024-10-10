@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <link href="/cmetropolitana/style.css" rel="stylesheet">
+    <title>Horários em tempo real - </title>
+    <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
+</head>
+
+<body>
+    <div class="spacer"></div>
+    <div class="header" id="header">
+        <strong>{STOP.NAME}</strong>
+        <div class="lines" id="lines"></div>
+    </div>
+    <div class="contents" id="contents">
+        <div class="info" id="info">
+            <strong>Linhas: </strong>{STOP.LINES}
+            <strong>Concelho: </strong>{STOP.MUNICIPALITY}
+            <p>Todos os dados apresentados foram obtidos através da <a
+                    href="https://github.com/carrismetropolitana/api">API da Carris Metropolitana</a>.</p>
+            <p>Saiba mais aqui <a href="/carrismetropolitana/">aqui</a>.</p>
+        </div>
+        <div class="departures">
+            <p><strong>Próximos autocarros:</strong></p>
+            <div class="services" id="services">
+                Carregando...
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <div class="autocomplete hidden" id="autocomplete"></div>
+        <input type="text" class="searchInput hidden" id="searchInput" placeholder="Escolha uma paragem"></input>
+        <div class="searchBtn" id="searchButton"><svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            width="24" 
+            height="24" 
+            fill="currentColor">
+            <path d="M10.5 2a8.5 8.5 0 1 0 6.314 14.267l5.404 5.404a1 1 0 0 0 1.415-1.415l-5.404-5.404A8.5 8.5 0 0 0 10.5 2zm0 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13z"/>
+        </svg></div>
+    </div>
+    <script src="/cmetropolitana/stop/scrollScript.js"></script>
+    <script src="/cmetropolitana/stop/search.js"></script>
+    <script src="/cmetropolitana/stop/main.js"></script>
+</body>
+
+</html>
