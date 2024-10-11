@@ -129,12 +129,28 @@ body {
     transition: transform 0.5s ease;
 }
 
+.search .mapBtn {
+    background-color: white;
+    border-radius: var(--black);
+    height: 3.5em;
+    width: 3.5em;
+    border-color: black;
+    border-width: .25em;
+    border-style: solid;
+    border-radius: 1.75em;
+    float: right;
+    position: absolute;
+    top: calc(100% - 3.25em);
+    left: calc(100% - 3.25em);
+    transform: translate(0, -4em);
+}
+
 .autocomplete {
     position: fixed;
     bottom: 4em; /* Just above the input */
     left: 20px;
     width: calc(100% - 40px - 2.5em);
-    max-height: 8em;
+    max-height: 12em;
     overflow-y: auto;
     background-color: white;
     border-radius: .5em;
@@ -148,15 +164,16 @@ body {
 
 .autocomplete div {
     padding: 10px;
-    font-size: xx-large;
+    padding-left: 20px;
+    height: 2em;
+    font-size: 100%;
+    vertical-align: middle;
     text-align: left;
-    margin-left: 10px;
     cursor: pointer;
 }
 
 .autocomplete div.a {
-    padding: 10px;
-    background-color: #9f9f9f;
+    background-color: #cfcfcf;
     font-size: xx-large;
     cursor: pointer;
 }
@@ -166,7 +183,8 @@ body {
     color: white;
 }
 
-.search .searchBtn svg {
+.search .searchBtn svg, .search .mapBtn svg {
+    color: #afafaf;
     width: 100%;
     height: 100%;
     padding: .5em;
@@ -412,6 +430,51 @@ body {
     max-height: calc(100%);
     overflow-y: auto;
     float: left;
+}
+
+.fullscreen-map {
+    background-color: white;
+    float: left;
+    overflow: hidden;
+    height: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stop-popup {
+    padding: 10px;
+    font-size: x-large;
+}
+
+.stop-popup .lines {
+    margin-top: 0px !important;
+}
+
+.stop-popup .lines span {
+    font-size: large !important;
+    overflow: hidden;
+    margin-top: 5px !important
+}
+
+.stop-popup button {
+    background-color: var(--accent);
+    border-width: 0px;
+    border-radius: 2em;
+    font-weight: bold;
+    font-size: x-large;
+    padding: 10px;
+}
+
+
+
+.stop-popup p {
+    font-weight: 800;
+    margin-top: 5px !important;
+    margin-bottom: 0px !important;
+    padding: 0px;
 }
 
 .map {

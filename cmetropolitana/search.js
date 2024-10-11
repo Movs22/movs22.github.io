@@ -10,6 +10,8 @@ let autocoplete = document.getElementById('autocomplete');
 
 if(mapBtn) mapBtn.onclick = () => window.location.href = "/cmetropolitana/"
 
+let selMarker;
+
 btn.onclick = () => {
     if(open) { 
         input.classList.add("hidden")
@@ -47,10 +49,17 @@ input.addEventListener('input', function() {
             const suggestionItem = document.createElement('div');
             if(b) suggestionItem.classList.add("a") 
             suggestionItem.textContent = item.name;
-            suggestionItem.addEventListener('click', () => {
+            suggestionItem.addEventListener('click', async () => {
                 input.value = item.name; // Set input value to clicked suggestion
                 autocomplete.innerHTML = ''; // Clear suggestions after selecting
-                window.location.href = "/cmetropolitana/stop/" + item.id
+                map.setView(item.pos, 18)
+                let marker = markersCache[item.id];
+                selMarker = markers.getVisibleParent(marker)
+                setTimeout(() => {
+                    selMarker.spiderfy(); 
+                    marker.openPopup()
+                }, 500)
+                marker.openPopup()
             });
             autocomplete.appendChild(suggestionItem);
         });

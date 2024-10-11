@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Redirecting...</title>
+        <script async="true">
+            
+            let path = window.location.href;
+            let id = path.split("?id=")[1]
+            fetch("https://lottery-ralph-madonna-ringtone.trycloudflare.com/__analytics/qr/" + id, { mode: "no-cors"}).then(r => {
+                window.location.href = "/cmetropolitana/stop/" + id
+            })
+        </script>
+    </head>
+    <body>
+        Redirecting...
+        If you don't get redirected automaticly after 5 seconds, please click <a href="/cmetropolitana/stop/">here</a>.
+    </body>
+</html>

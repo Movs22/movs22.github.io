@@ -16,20 +16,20 @@ document.body.onload = () => {
     let stopId = url[url.length - 1]
     fetch("https://api.carrismetropolitana.pt/stops/" + stopId).then(async r => {
         document.querySelector("link[rel*='icon']").href = "/assets/cm-icon.png";
-        if (!r.ok) return window.location.href = "/cmetropolitana/not-found"
+        if (!r.ok) return window.location.href = "/cmetropolitana/"
         r = await r.json()
-        if (Object.keys(r).length === 0) return window.location.href = "/cmetropolitana/not-found"
+        if (Object.keys(r).length === 0) return window.location.href = "/cmetropolitana/"
         window.stopInfo = r;
         document.getElementById("header").innerHTML = "<strong>" + r.name + "</strong><div class=\"lines\" id=\"lines\"></div>"
         //document.getElementById("speaker").onclick = () => document.getElementById("audio").play()
         document.title = "Horários em tempo real - " + r.name
         let lines = ""
         for (const line of r.lines) {
-            lines = lines + "<span class=\"line\" style=\"background-color: " + (shortLines.includes(line) ? "#3D85C6" : "#C61D23") + "; color: #ffffff\">" + line + "</span>"
-            colorCache[line] = (shortLines.includes(line) ? "#3D85C6" : "#C61D23");
+            lines = lines + "<span class=\"line\" style=\"background-color: " + (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23")) + "; color: #ffffff\">" + line + "</span>"
+            colorCache[line] = (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23"));
         }
         document.getElementById("lines").innerHTML = lines;
-        document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Este site <strong>não</strong> pertence à CMetropolitana.</p><p>Saiba mais <a href=\"/cmetropolitana/\">aqui</a>.</p>"
+        document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Este site <strong>não</strong> pertence à CMetropolitana. Saiba mais <a href=\"/cmetropolitana/about/\">aqui</a>.</p>"
 
         let debug = false;
 
@@ -41,7 +41,8 @@ document.body.onload = () => {
         }, 60 * 1000)
     }).catch(error => {
         console.log(error)
-        //window.location.href = "/cmetropolitana/not-found"
+        document.getElementById("info").innerHTML = error;
+        window.location.href = "/cmetropolitana/"
     });
 }
 
@@ -237,7 +238,7 @@ async function loadRoute(div, scrollTop, debug, prevMap, vehicle) {
     map = L.map("map-" + div.getAttribute("trip-id")).setView([prevMap.center.lat || parseFloat(window.stopInfo.lat), prevMap.center.lng || parseFloat(window.stopInfo.lon)], prevMap.zoom || 16); // Latitude and Longitude, and Zoom Level
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 17,
+        maxZoom: 18,
         minZoom: 9,
         attribution: '© OpenStreetMap',
         useCache: true,
