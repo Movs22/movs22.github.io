@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="/cmetropolitana/style.css" rel="stylesheet">
+    <title>Horários em tempo real - O que é?</title>
+    <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
+    <style>
+        .dest {
+            font-size: large !important;
+        }
+
+        .service .route,
+        service .route span {
+            height: 0em;
+            max-height: 0em;
+            margin: 0px;
+            transition: all 0.5s ease;
+        }
+
+        .service .route span {
+            display: none;
+        }
+
+        .service.selected .route span {
+            display: block;
+            max-height: 13em;
+            height: 13em;
+        }
+
+        .service.selected .route {
+            height: 13em;
+            max-height: 13em;
+            transition: all 0.5s ease;
+        }
+
+        .service .route p {
+            font-size: medium;
+            text-align: left;
+        }
+
+        .service {
+            height: 2em;
+            transition: all 0.5s ease;
+        }
+
+        .dest {
+            text-wrap: stable !important;
+            overflow-wrap: normal !important;
+            overflow: visible !important;
+        }
+
+        .service.selected {
+            height: 15em;
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="spacer"></div>
+    <div class="header" id="header">
+        <strong>Horários em Tempo Real</strong>
+    </div>
+    <div class="contents" id="contents">
+        <div class="info" id="info">
+            Este site foi criado por um estudante da AML, <strong>com o objetivo de permitir a visualização dos
+                autocarros em tempo real</strong>, em qualquer paragem, de forma prática, simples e sem quaisquer
+            limitações.
+            <br><br>Apesar de já existirem outras aplicações que também disponibilizam esta informação, incluíndo uma
+            oficial, <strong>muitas delas nem sempre funcionam</strong>, havendo dias em que não há informação em tempo
+            real e outros em que nem todos os serviços têm essa informação.<br>Ao obter os dados de duas formas
+            diferentes, <strong>este site garante que a informação apresentada é sempre (ou quase sempre)
+                correta</strong>, assegurando também que as páginas em tempo real carregam com todos os autocarros.
+            <br><br>Este site também <strong>permite ver o tipo de veículo que está a ser usado em um determinado
+                serviço</strong> (algo que é prático em linhas onde circulam tanto autocarros de tamanho normal e carrinhas),
+            graças à analise dos diversos veículos e dos seus IDs.
+            <br><br>Todos os dados são obtidos através da <a href="https://github.com/carrismetropolitana/api">API
+                Pública da CMetropolitana</a>, bem como <a
+                href="https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana/patterns">cópias locais dos
+                serviços</a>, tudo de forma a garantir os resultados mais fiéis e utilizando a menor quantidade de dados
+            móveis possíveis.
+            <br><br><strong>Se tiver alguma questão, alguma crítica/sugestão ou se encontrar algum erro,</strong> esteja
+            à vontade e entre em contacto pelo <a href="https://github.com/Movs22/movs22.github.io/tree/main">GitHub</a>
+            ou pelo <a href="https://discord.com/users/896732255534338078">Discord</a>!
+        </div>
+        <div class="departures">
+            <p><strong>Perguntas Frequentes (FaQ)</strong></p>
+            <div class="services" id="services">
+
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <div class="autocomplete hidden" id="autocomplete"></div>
+        <input type="text" class="searchInput hidden" id="searchInput" placeholder="Escolha uma paragem"></input>
+        <div class="searchBtn" id="searchButton"><svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            width="24" 
+            height="24" 
+            fill="currentColor">
+            <path d="M10.5 2a8.5 8.5 0 1 0 6.314 14.267l5.404 5.404a1 1 0 0 0 1.415-1.415l-5.404-5.404A8.5 8.5 0 0 0 10.5 2zm0 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13z"/>
+        </svg></div>
+    </div>
+    <script src="/cmetropolitana/stop/search.js"></script>
+    <script>
+        let faq = {
+            "Este site pertence à CMetropolitana?": "<strong>Não</strong>, este site não é gerido ou da responsabilidade da CMetropolitana ou da TML. O site foi criado por um habitante local e utiliza os dados disponibilizados pela CMetropolitana através da sua <a href=\"https://github.com/carrismetropolitana/api\">API pública</a>.",
+            "Como é que o site funciona?": "Este síte é hospedado na GitHub Pages e utiliza HTML, JavaScript e CSS para apresentar o conteúdo (sendo que não existe um servidor back-end). Toda a informação apresentada é processada diretamente no dispositivo e obtida através da <a href=\"https://github.com/carrismetropolitana/api\">API pública</a> da CMetropolitana. Adicionalmente, no caso das paragens/horários completos, a informação é pré-processada e está disponível em <a href=\"https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana/patterns\">nesta pasta</a>. Pode ver e analizar o código fonte <a href=\"https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana\">no GitHub</a>.",
+            "Porque é que os horários/tempo de chegada diferem entre esta aplicação e o Google Maps?": "Os horários apresentados nesta página são obtidos diretamente da Carris Metropolitana enquanto que o Google Maps utiliza uns horários ligeiramente modificados, que nem sempre correspondem aos horários oficiais. Adicionalmente, os tempos de chegada neste site também são fornecidos pela CMetropolitana (ou, caso não existam), são calculados automaticamente no dispositivo. Embora na maioria dos casos corresponde aos tempos de chegada no Google Maps, às vezes pode aparecer com uma diferença de alguns minutos.*<br><br>*Tenha em conta que os autocarros que aparecem como \"Live\" no Google Maps (em vez de \"Early X mins\"/\"On time\") <strong>não</strong> têm informações sobre os atrasos e apresentam um horário baseado na localização atual do autocarro.",
+            "O que é um Autocarro de 3 portas/Carrinha/(...)?": "<ul><li>Um autocarro de 3 portas é um dos autocarros novos que, como o nome indica, tem 3 portas (1 na parte frontal, 1 na parte central e 1 na parte traseira).</li><li>Um autocarro de 2 portas é um dos autocarros da ex-Vimeca/ex-Scotturb que, como o nome indica, tem duas portas. (uma na frente e uma na parte central)</li><li>Uma carrinha é um autocarro mais pequeno (com 1 porta à frente e uma na traseira), geralmente utilizados em linhas circulares.</li></lu><br>O tipo de autocarro é obtido através do ID do veículo alocado ao serviço.",
+            "Como é que posso entrar em contacto com o responsável pelo site?": "Para entrar em contacto com o responsável deste site, deve contactá-lo pelo <a href=\"https://github.com/Movs22/movs22.github.io/tree/main\">GitHub</a> ou pelo <a href=\"https://discord.com/users/896732255534338078\">Discord</a>"
+        }
+
+        let prevSelected;
+        document.body.onload = () => {
+            Object.keys(faq).forEach(key => {
+                let div = document.createElement("div")
+                div.classList.add("service")
+                div.onclick = () => {
+                    if (div.classList.contains("selected")) {
+                        div.classList.remove("selected");
+                        prevSelected = undefined
+                        selectedVec = undefined
+                    } else {
+                        prevSelected ? prevSelected.classList.remove("selected") : null
+                        div.classList.add("selected")
+                        prevSelected = div;
+                        selectedVec = key
+                    }
+                }
+                div.innerHTML = "<div class=\"serviceUpper\"><p class=\"dest\"><strong>" + key + "</strong></p></div><div class=\"route\" style=\"text-align: left; border-radius: 15px; padding: 15px;\"><span>" + faq[key] + "</span></div>"
+                document.getElementById("services").appendChild(div)
+            })
+        }
+    </script>
+
+</body>
+
+</html>
