@@ -368,7 +368,7 @@ body {
     padding: 10px;
     margin-top: 10px;
     border-radius: 15px;
-    height: 5em;
+    min-height: 5em;
     transition: height 0.5s ease;
 }
 
@@ -376,6 +376,31 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.warnings {
+    margin-top: 10px;
+    width: 100%;
+    text-align: left;
+    background-color: #fff5b3;
+    padding: 5px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.warnings p {
+    text-align: left;
+    margin: 0px;
+    font-size: large;
+    vertical-align: middle;
+}
+
+.warnings p::before {
+    content: "⚠️";
+    color: orange; 
+    font-size: large;
+    margin: 0px;
+    vertical-align: middle;
 }
 
 .service .arrival {
@@ -681,5 +706,5 @@ body {
 }
 
 .service.selected {
-    height: 23em;
+    min-height: 23em;
 }

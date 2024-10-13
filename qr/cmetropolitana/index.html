@@ -6,9 +6,13 @@
             
             let path = window.location.href;
             let id = path.split("?id=")[1]
-            fetch("https://decisions-night-implications-challenged.trycloudflare.com/__analytics/qr/" + id, { mode: "no-cors"}).then(r => {
+            try {
+                fetch("https://lectures-ira-fast-passage.trycloudflare.com/__analytics/qr/" + id, { mode: "no-cors"}).then(r => {
                 window.location.href = "/cmetropolitana/stop/" + id
-            })
+                })
+            } catch(e) {
+                window.location.href = "/cmetropolitana/stop/" + id
+            }    
         </script>
     </head>
     <body>

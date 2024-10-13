@@ -9,6 +9,8 @@ let colorCache = {}
 
 let patternsCache = {};
 
+let notesCache = {};
+
 let routeCache = {};
 
 document.body.onload = () => {
@@ -117,6 +119,17 @@ async function fetchBuses(id, debug) {
 
     routeCache = res;
 
+    for(b in res) {
+        if(!res[b].vehicle_id) continue;
+        try {
+        notes = notesCache[res[b].vehicle_id] || (await fetch("https://lectures-ira-fast-passage.trycloudflare.com/notes/" + res[b].vehicle_id.split("|")[1], { mode: "cors"}).then(r => r.json()))
+        } catch(e) {
+            notes = [];
+        } 
+        notesCache[res[b].vehicle_id] = notes;
+        res[b].notes = notes;
+    }
+
     document.getElementById("services").innerHTML = ""
     res.forEach(bus => {
         let arrival = "";
@@ -196,7 +209,12 @@ async function fetchBuses(id, debug) {
             serviceLower = "<div class=\"serviceLower\">" + serviceLower + "</div>";
         }
 
-        div.innerHTML = "<div class=\"serviceUpper\">" + serviceUpper + "</div>" + serviceLower
+        let warnings = "";
+        if(bus.notes && bus.notes.length > 0) {
+            warnings = "<div class=\"warnings\">" + bus.notes.map(a => "<p>" + a + "</p>") + "</div>"
+        }
+
+        div.innerHTML = "<div class=\"serviceUpper\">" + serviceUpper + "</div>" + serviceLower + warnings
         document.getElementById("services").appendChild(div)
         if (bus.trip_id + "&" + bus.stop_sequence === selectedVec && div) {
 
