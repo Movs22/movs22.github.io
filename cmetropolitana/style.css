@@ -233,6 +233,8 @@ body {
 .header.expanded .lines {
     font-size: .6em;
     opacity: 1;
+    overflow-x: scroll;
+    scrollbar-width: 0px;
     transition: opacity 0.5s ease;
 }
 
@@ -264,6 +266,11 @@ body {
     text-align: center; 
     margin-right: 5px;
     border-radius: 2em;
+}
+
+.line.disabled {
+    filter:opacity(0.5);
+    color: #acacac;
 }
 
 .line.disabled {
@@ -342,6 +349,18 @@ body {
     color: #000000;
     font-weight: bold;
     text-decoration: none;
+}
+
+.service.disabled {
+    background-color: #dedede;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 15px;
+    height: 4em;
+}
+
+.service.disabled:hover {
+    filter: brightness(1);
 }
 
 .service {
@@ -451,6 +470,7 @@ body {
 
 .stop-popup .lines {
     margin-top: 0px !important;
+    width: 100%;
 }
 
 .stop-popup .lines span {

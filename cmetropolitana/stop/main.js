@@ -25,7 +25,7 @@ document.body.onload = () => {
         document.title = "Horários em tempo real - " + r.name
         let lines = ""
         for (const line of r.lines) {
-            lines = lines + "<span class=\"line\" style=\"background-color: " + (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23")) + "; color: #ffffff\">" + line + "</span>"
+            lines = lines + "<span class=\"line"  + (line.startsWith("1") ? "" : " disabled") + "\" style=\"background-color: " + (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23")) + "; color: #ffffff\">" + line + "</span>"
             colorCache[line] = (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23"));
         }
         document.getElementById("lines").innerHTML = lines;
@@ -78,7 +78,11 @@ async function fetchBuses(id, debug) {
 
     for (let b in res) {
         if (patternsCache[res[b].pattern_id]) continue;
-        let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => r.json())
+        let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => {
+            if(r.ok) return r;
+            r.json = () => {}
+            return r;
+        }).then(r => r.json())
         patternsCache[res[b].pattern_id] = p;
     }
 
@@ -117,8 +121,8 @@ async function fetchBuses(id, debug) {
     res.forEach(bus => {
         let arrival = "";
         let delay = "";
-
-        let arrivalSpan = "scheduled";
+        if(!bus.pattern_id.startsWith("1")) bus.estimated_arrival = null;
+        let arrivalSpan = "scheduled"; 
         if (bus.estimated_arrival) {
             let dif = bus.estimated_arrival_unix - Date.now() / 1000
             dif = Math.floor(dif / 60)
@@ -177,14 +181,22 @@ async function fetchBuses(id, debug) {
             }
         }
 
-        serviceUpper = "<p class=\"dest\"><span class=\"line\" style=\"background-color: " + colorCache[bus.line_id] + "; color: #ffffff\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p>";
+        serviceUpper = "<p class=\"dest\"><span class=\"line" + (bus.pattern_id.startsWith("1") ? "" : " disabled") + "\" style=\"background-color: " + colorCache[bus.line_id] + "; color: #ffffff\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p>";
         serviceLower = "<p class=\"desc\">" + (getVehicle(bus.vehicle_id) !== "Desconhecido" ? "Tipo de veículo: <strong>" + getVehicle(bus.vehicle_id) + "</strong>" : "") + "</p><p class=\"delay\">" + delay + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"routePattern\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div><div class=\"map\" id=\"map-" + bus.trip_id + "&" + bus.stop_sequence + "\">Loading...</div></div>";
-
+        
+        
         if (debug) {
             serviceLower = "<p class=\"desc\">CurStop: " + bus.currentLocation + "| VecID: " + bus.vehicle_id + " | TripID: " + bus.trip_id + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div><div class=\"map\" id=\"map-" + bus.trip_id + "&" + bus.stop_sequence + "\">Loading...</div>"
         }
+        if(!bus.pattern_id.startsWith("1")) {
+            serviceLower = "";
+            div.onclick = () => {}
+            div.classList.add("disabled")
+        } else {
+            serviceLower = "<div class=\"serviceLower\">" + serviceLower + "</div>";
+        }
 
-        div.innerHTML = "<div class=\"serviceUpper\">" + serviceUpper + "</div><div class=\"serviceLower\">" + serviceLower + "</div>"
+        div.innerHTML = "<div class=\"serviceUpper\">" + serviceUpper + "</div>" + serviceLower
         document.getElementById("services").appendChild(div)
         if (bus.trip_id + "&" + bus.stop_sequence === selectedVec && div) {
 
