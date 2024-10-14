@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+    <script src="/cmetropolitana/stop/main.js" defer></script>
 
+    <script src="/cmetropolitana/constants.js"></script>
     <link href="/cmetropolitana/style.css" rel="stylesheet">
-    <title>Horários em tempo real - </title>
+    <title>Horários em tempo real</title>
     <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
 </head>
 
@@ -22,8 +24,8 @@
             <strong>Linhas: </strong>{STOP.LINES}
             <strong>Concelho: </strong>{STOP.MUNICIPALITY}
             <p>Todos os dados apresentados foram obtidos através da <a
-                    href="https://github.com/carrismetropolitana/api">API da Carris Metropolitana</a>.</p>
-            <p>Saiba mais aqui <a href="/carrismetropolitana/">aqui</a>.</p>
+                    href="https://github.com/carrismetropolitana/api">API da CMetropolitana</a>.</p>
+            <p>Saiba mais sobre este site <a href="/carrismetropolitana/about">na página inicial</a>.</p>
         </div>
         <div class="departures">
             <p><strong>Próximos autocarros:</strong></p>
@@ -48,7 +50,6 @@
     </div>
     <script src="/cmetropolitana/stop/scrollScript.js"></script>
     <script src="/cmetropolitana/stop/search.js"></script>
-    <script src="/cmetropolitana/stop/main.js"></script>
 </body>
 
 </html>

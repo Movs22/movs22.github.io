@@ -1,0 +1,175 @@
+:root {
+    --accent: #ffdd01;
+    --white: #f0f0f0;
+    --black: #000000;
+    --secondary: #d0d0d0; 
+    --route: #ececec;
+    --ontime: #3bb33b;
+    --delayed: #b33b3b;
+    --early: #b37b3b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+.marker {
+    position: relative;
+}
+
+.marker2 {
+    position: absolute;
+    top: 50%;   
+    left: 50%;
+}
+
+.marker2 svg {
+    z-index: 100000;
+}
+
+body {
+    background-color: var(--white);
+    margin: 0px;
+    padding: 0px;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.ontime {
+    color: var(--ontime) !important;
+}
+
+.delayed {
+    color: var(--delayed) !important;
+}
+
+.early  {
+    color: var(--early) !important;
+}
+
+.scheduled {
+    color: #7f7f7f;
+}
+
+.spacer {
+    height: 20px;
+    background-color: var(--white);
+    z-index: 100000;
+}
+
+.contents {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    padding-top: 0px;
+    width: calc(100% - 20px);
+    height: calc(100% - 3em - 60px);
+    margin-top: calc(3em + 20px);
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.header {
+    margin-left: 20px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size:xx-large;
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    border-radius: 1em 1em 0em 0em;
+    line-height: 1.5;
+    position:fixed;
+    z-index: 10000;
+    height: 2.5em;
+    transition: height 0.5s ease, border-radius 0.5s ease;
+    width: calc(100% - 40px);
+}
+
+.info {
+    background-color: var(--accent);
+    padding: 15px;
+    min-height: 3rem;
+    font-family: sans-serif;
+    font-size: x-large;
+    text-align: center;
+}
+
+.info button {
+    background: none;
+    border-width: 0px;
+    width: 6rem;
+    height: 6rem;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.line {
+    background-color: #ff00ff;
+    color: white;
+    padding: .45rem;
+    font-weight: bold;
+    width: 4.8rem;
+    cursor: pointer;
+    line-height: 1.5rem;
+    display: inline-block;
+    text-align: center; 
+    margin-right: 5px;
+    font-size: 1.2rem; /* Slightly reduced */
+    position: relative;
+    border-radius: 2rem;
+    vertical-align: middle; /* Added to improve alignment */
+}
+
+.info button svg {
+    width: 100%;
+    height: 100%;
+}
+
+.info button:hover {
+    cursor: pointer;
+}
+
+.about a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.about {
+    background-color: var(--secondary);
+    padding: 1rem;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-size: .75rem;
+    min-height: 1em;
+}
+
+.main {
+    background-color: var(--accent);
+    padding: .5em;
+    margin: 0;
+    display: block;
+    position: relative;
+    margin-left: 50%;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    border-radius: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 2em;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+}

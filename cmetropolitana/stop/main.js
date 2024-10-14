@@ -1,9 +1,17 @@
+let url = window.location.href.split("?id=")
+let stopId = url[1]
+
+
+let vehicles;
+
+let stopInfo;
+
+let vehiclesEndpoint = (true ? "https://api.carrismetropolitana.pt/vehicles" : "/data/vehicles.json")
+let resEndpoint = (true ? ("https://api.carrismetropolitana.pt/stops/" + stopId + "/realtime") : "/data/realtime.json")
 
 window.ignoreCollapseCall;
 
 let interval;
-
-let shortLines = ["1008", "1009", "1012", "1015", "1109", "1113", "1114", "1120", "1124", "1201", "1204", "1205", "1210", "1216", "1221", "1222", "1226", "1229", "1230", "1252", "1501", "1510", "1511", "1513", "1524"]
 
 let colorCache = {}
 
@@ -13,13 +21,9 @@ let notesCache = {};
 
 let routeCache = {};
 
-document.body.onload = () => {
-    let url = window.location.href.split("/")
-    let stopId = url[url.length - 1]
-    fetch("https://api.carrismetropolitana.pt/stops/" + stopId).then(async r => {
+document.body.onload = async () => {
+    fetch("https://api.carrismetropolitana.pt/stops/" + stopId).then(r => (!r.ok ? {} : r.json())).then(r => {
         document.querySelector("link[rel*='icon']").href = "/assets/cm-icon.png";
-        if (!r.ok) return window.location.href = "/cmetropolitana/"
-        r = await r.json()
         if (Object.keys(r).length === 0) return window.location.href = "/cmetropolitana/"
         window.stopInfo = r;
         document.getElementById("header").innerHTML = "<strong>" + r.name + "</strong><div class=\"lines\" id=\"lines\"></div>"
@@ -31,25 +35,23 @@ document.body.onload = () => {
             colorCache[line] = (shortLines.includes(line) ? "#3D85C6" : (line === "CP" ? "#2A9057" : "#C61D23"));
         }
         document.getElementById("lines").innerHTML = lines;
-        document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>Este site <strong>não</strong> pertence à CMetropolitana. Saiba mais <a href=\"/cmetropolitana/about/\">aqui</a>.</p>"
+        document.getElementById("info").innerHTML = "<p><strong>Linhas: </strong>" + lines + "</p><p><strong>Concelho: </strong>" + (r.municipality_name || "Por definir") + "</p><p>A informação apresentada relativa ao estado dos veículos <strong>não</strong> é oficial, sendo fornecida pelos diversos utilizadores da CMetropolitana.</p><p>Este site <strong>não</strong> pertence à CMetropolitana. Saiba mais <a href=\"/cmetropolitana/about/\">na página inicial</a>.</p>"
 
         let debug = false;
 
         debug = window.location.host === "localhost:8080"
 
-        await fetchBuses(stopId, debug)
+        fetchBuses(stopId, debug, true)
         interval = setInterval(async () => {
             await fetchBuses(stopId, debug)
         }, 60 * 1000)
     }).catch(error => {
-        console.log(error)
         document.getElementById("info").innerHTML = error;
-        window.location.href = "/cmetropolitana/"
+        window.location.href = "/cmetropolitana/?error=" + error
     });
 }
 
 document.body.onclose = interval ? clearInterval(interval) : true
-
 
 let map;
 
@@ -61,14 +63,11 @@ async function fetchBuses(id, debug) {
     if(map) {
         prevMap = {center: map.getCenter(), zoom: map.getZoom()}
     }
-    let vehiclesEndpoint = (true ? "https://api.carrismetropolitana.pt/vehicles" : "/data/vehicles.json")
-    let resEndpoint = (true ? ("https://api.carrismetropolitana.pt/stops/" + id + "/realtime") : "/data/realtime.json")
     let scrollTop
     if (prevSelected && document.getElementById("stops-" + prevSelected.getAttribute("trip-id"))) {
         scrollTop = document.getElementById("stops-" + prevSelected.getAttribute("trip-id")).scrollTop;
     }
-    let vehicles = await fetch(vehiclesEndpoint).then(r => r.json())
-    //if(debug) Date.now = () => vehicles[0].timestamp * 1000
+    vehicles = await fetch(vehiclesEndpoint).then(r => r.json())
     routeCache = null;
     let now = Date.now() / 1000
     let res = await fetch(resEndpoint).then(r => r.json())
@@ -78,18 +77,26 @@ async function fetchBuses(id, debug) {
 
     res = res.slice(0, 60)
 
+    let fetchPromises = [];
+
+
+
     for (let b in res) {
-        if (patternsCache[res[b].pattern_id]) continue;
-        let p = await fetch("../patterns/" + res[b].pattern_id + ".json").then(r => {
+        if (patternsCache[res[b].pattern_id] || !res[b].pattern_id.startsWith("1")) continue;
+        patternsCache[res[b].pattern_id] = {}
+        let f = fetch("../patterns/" + res[b].pattern_id + ".json").then(r => {
             if(r.ok) return r;
             r.json = () => {}
             return r;
-        }).then(r => r.json())
-        patternsCache[res[b].pattern_id] = p;
+        }).then(r => r.json()).then(p => patternsCache[res[b].pattern_id] = p)
+        fetchPromises.push(f);
     }
+
+    await Promise.all(fetchPromises)
 
     res.forEach(bus => {
         let vehicle = vehicles.find(a => a.trip_id === bus.trip_id)
+        if(!bus.pattern_id.startsWith("1")) return;
         if (vehicle) {
             bus.currentLocation = vehicle.stop_id;
             if (!bus.estimated_arrival) {
@@ -119,16 +126,12 @@ async function fetchBuses(id, debug) {
 
     routeCache = res;
 
-    for(b in res) {
-        if(!res[b].vehicle_id) continue;
-        try {
-        notes = notesCache[res[b].vehicle_id] || (await fetch("https://lectures-ira-fast-passage.trycloudflare.com/notes/" + res[b].vehicle_id.split("|")[1], { mode: "cors"}).then(r => r.json()))
-        } catch(e) {
-            notes = [];
-        } 
-        notesCache[res[b].vehicle_id] = notes;
-        res[b].notes = notes;
-    }
+    let notes = (await fetch(CLOUDFLARED + "notes/", { mode: "cors", method: "POST", headers: { "Content-Type": "application/json"}, body: JSON.stringify({vehicles: res.map(a => a.vehicle_id)})}).then(r => r.json()));
+
+    notes.forEach(n => {
+        res.find(a => a.vehicle_id === n.id).notes = n.notes;
+        notesCache[n.id] === n.notes;
+    })
 
     document.getElementById("services").innerHTML = ""
     res.forEach(bus => {
@@ -194,12 +197,14 @@ async function fetchBuses(id, debug) {
             }
         }
 
+
+
         serviceUpper = "<p class=\"dest\"><span class=\"line" + (bus.pattern_id.startsWith("1") ? "" : " disabled") + "\" style=\"background-color: " + colorCache[bus.line_id] + "; color: #ffffff\">" + bus.line_id + "</span><strong>" + bus.headsign + "</strong></p><p class=\"arrival\">" + arrival + "</p>";
         serviceLower = "<p class=\"desc\">" + (getVehicle(bus.vehicle_id) !== "Desconhecido" ? "Tipo de veículo: <strong>" + getVehicle(bus.vehicle_id) + "</strong>" : "") + "</p><p class=\"delay\">" + delay + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"routePattern\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div><div class=\"map\" id=\"map-" + bus.trip_id + "&" + bus.stop_sequence + "\">Loading...</div></div>";
         
         
         if (debug) {
-            serviceLower = "<p class=\"desc\">CurStop: " + bus.currentLocation + "| VecID: " + bus.vehicle_id + " | TripID: " + bus.trip_id + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div><div class=\"map\" id=\"map-" + bus.trip_id + "&" + bus.stop_sequence + "\">Loading...</div>"
+            serviceLower = "<p class=\"desc\">" + "CurStop: " + bus.currentLocation + "| VecID: " + bus.vehicle_id + " | TripID: " + bus.trip_id + "</p></div><div class=\"route\" id=\"route-" + bus.trip_id + "&" + bus.stop_sequence + "\"><div class=\"stops\" id=\"stops-" + bus.trip_id + "&" + bus.stop_sequence + "\"></div><div class=\"map\" id=\"map-" + bus.trip_id + "&" + bus.stop_sequence + "\">Loading...</div>"
         }
         if(!bus.pattern_id.startsWith("1")) {
             serviceLower = "";
@@ -211,7 +216,7 @@ async function fetchBuses(id, debug) {
 
         let warnings = "";
         if(bus.notes && bus.notes.length > 0) {
-            warnings = "<div class=\"warnings\">" + bus.notes.map(a => "<p>" + a + "</p>") + "</div>"
+            warnings = "<div class=\"warnings\">" + bus.notes.map(a => "<p>⚠️ " + a + "</p>") + "</div>"
         }
 
         div.innerHTML = "<div class=\"serviceUpper\">" + serviceUpper + "</div>" + serviceLower + warnings

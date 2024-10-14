@@ -6,19 +6,7 @@
     <script>
         path = window.location.pathname;
         if (path.startsWith("/cmetropolitana/stop/")) {
-            history.pushState(null, '', path);
-
-            fetch('/cmetropolitana/stop/index.html')
-                .then(response => response.text())
-                .then(html => {
-                    document.open();
-                    document.write(html);
-                    document.close();
-                })
-                .catch(err => {
-                    document.body.innerHTML = "<h1>Failed to load page</h1>";
-                    console.error('Error loading stop.html:', err);
-                });
+            window.location.href = "/cmetropolitana/stop/?id=" + path.split("/")[path.split("/").length-1]
         } else {
             history.pushState(null, '', path);
             
