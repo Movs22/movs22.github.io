@@ -2,21 +2,24 @@
 <html>
     <head>
         <title>Redirecting...</title>
-        <script async="true">
-            
+        <script src="/cmetropolitana/constants.js"></script>
+        <script>
             let path = window.location.href;
             let id = path.split("?id=")[1]
             try {
-                fetch("https://lectures-ira-fast-passage.trycloudflare.com/__analytics/qr/" + id, { mode: "no-cors"}).then(r => {
-                window.location.href = "/cmetropolitana/stop/" + id
-                })
+                fetch(CLOUDFLARED + "__analytics/qr/" + id, { mode: "no-cors"}).then(r => {
+                    window.location.href = "/cmetropolitana/stop/?id=" + id
+                });
             } catch(e) {
-                window.location.href = "/cmetropolitana/stop/" + id
-            }    
+                window.location.href = "/cmetropolitana/stop/?id=" + id
+            }  
         </script>
     </head>
     <body>
         Redirecting...
-        If you don't get redirected automaticly after 5 seconds, please click <a href="/cmetropolitana/stop/">here</a>.
+        If you don't get redirected automaticly after 5 seconds, please click <a id="a" href="/cmetropolitana/stop/">here</a>.
+        <script>
+            document.body.onload = () => document.getElementById("a").href = "/cmetropolitana/stop/?id=" + id
+        </script>
     </body>
 </html>

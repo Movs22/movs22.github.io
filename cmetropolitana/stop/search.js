@@ -50,7 +50,7 @@ input.addEventListener('input', function() {
             suggestionItem.addEventListener('click', () => {
                 input.value = item.name; // Set input value to clicked suggestion
                 autocomplete.innerHTML = ''; // Clear suggestions after selecting
-                window.location.href = "/cmetropolitana/stop/" + item.id
+                window.location.href = "/cmetropolitana/stop/?id=" + item.id
             });
             autocomplete.appendChild(suggestionItem);
         });

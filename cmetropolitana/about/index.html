@@ -3,140 +3,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <link href="/cmetropolitana/style.css" rel="stylesheet">
+    <link href="/cmetropolitana/about/style.css" rel="stylesheet">
     <title>Horários em tempo real - O que é?</title>
     <link rel="icon" href="/assets/cm-icon.png?" sizes="256x256">
-    <style>
-        .dest {
-            font-size: large !important;
-        }
-
-        .service .route,
-        service .route span {
-            height: 0em;
-            max-height: 0em;
-            margin: 0px;
-            transition: all 0.5s ease;
-        }
-
-        .service .route span {
-            display: none;
-        }
-
-        .service.selected .route span {
-            display: block;
-            max-height: 13em;
-            height: 13em;
-        }
-
-        .service.selected .route {
-            height: 13em;
-            max-height: 13em;
-            transition: all 0.5s ease;
-        }
-
-        .service .route p {
-            font-size: medium;
-            text-align: left;
-        }
-
-        .service {
-            height: 2em;
-            transition: all 0.5s ease;
-        }
-
-        .dest {
-            text-wrap: stable !important;
-            overflow-wrap: normal !important;
-            overflow: visible !important;
-        }
-
-        .service.selected {
-            height: 15em;
-            transition: all 0.5s ease;
-        }
-    </style>
 </head>
 
 <body>
     <div class="spacer"></div>
     <div class="header" id="header">
-        <strong>Horários em Tempo Real</strong>
+        <strong>Horários em Tempo Real - O que é?</strong>
     </div>
     <div class="contents" id="contents">
         <div class="info" id="info">
-            Este site foi criado por um estudante da AML, <strong>com o objetivo de permitir a visualização dos
-                autocarros em tempo real</strong>, em qualquer paragem, de forma prática, simples e sem quaisquer
-            limitações.
-            <br><br>Apesar de já existirem outras aplicações que também disponibilizam esta informação, incluíndo uma
-            oficial, <strong>muitas delas nem sempre funcionam</strong>, havendo dias em que não há informação em tempo
-            real e outros em que nem todos os serviços têm essa informação.<br>Ao obter os dados de duas formas
-            diferentes, <strong>este site garante que a informação apresentada é sempre (ou quase sempre)
-                correta</strong>, assegurando também que as páginas em tempo real carregam com todos os autocarros.
-            <br><br>Este site também <strong>permite ver o tipo de veículo que está a ser usado em um determinado
-                serviço</strong> (algo que é prático em linhas onde circulam tanto autocarros de tamanho normal e carrinhas),
-            graças à analise dos diversos veículos e dos seus IDs.
-            <br><br>Todos os dados são obtidos através da <a href="https://github.com/carrismetropolitana/api">API
-                Pública da CMetropolitana</a>, bem como <a
-                href="https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana/patterns">cópias locais dos
-                serviços</a>, tudo de forma a garantir os resultados mais fiéis e utilizando a menor quantidade de dados
-            móveis possíveis.
-            <br><br><strong>Se tiver alguma questão, alguma crítica/sugestão ou se encontrar algum erro,</strong> esteja
-            à vontade e entre em contacto pelo <a href="https://github.com/Movs22/movs22.github.io/tree/main">GitHub</a>
-            ou pelo <a href="https://discord.com/users/896732255534338078">Discord</a>!
+            <br>
+            <h3>Entre em contacto!</h3>
+    
+            <button onclick="window.open('mailto:github.movies22@gmail.com','_blank').focus()"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48"><path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"></path><path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z"></path><polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"></polygon><path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"></path><path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"></path></svg></button>
+            <button onclick="window.open('https://discord.com/users/896732255534338078','_blank').focus()"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100"  viewBox="0 -28.5 256 256" version="1.1" preserveAspectRatio="xMidYMid"><g><path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" fill="#5865F2" fill-rule="nonzero"></path></g></svg></button>
+            <button onclick="window.open('https://github.com/Movs22/','_blank').focus()"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewbox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="#fff"/></svg></button>
         </div>
-        <div class="departures">
-            <p><strong>Perguntas Frequentes (FaQ)</strong></p>
-            <div class="services" id="services">
-
-            </div>
+        <div class="about">
+            <p><strong>Criei esta página como alternativa à aplicação oficial e ao Google Maps</strong>, bem como aos outros city-mappers que, ou apresentam anúcios ou colocam algumas funcionalidades por trás de um plano premium.</p>
+            <br>
+            <h2>Como funciona?</h2>
+            <p>Este site é hospedado no <a href="https://github.com/Movs22/movs22.github.io/">Github</a>, através do Github pages.<br>Utiliza a <a href="https://github.com/carrismetropolitana/api">API pública da CMetropolitana</a> e os cerca de 2 meses de experiência que adquiri ao experimentar com a API pública (através de um bot no discord e outros projetos de uso pessoal). <br><br>Assim, este site não só permite ver as próximas partidas, como também o tipo de veículo (algo que não é partilhado em mais nenhuma plataforma) e, caso a API dos horários em tempo real vá abaixo (como têm acontecido ultimamente), consegue ainda estimar as chegadas através da posição dos veículos.</a><br><br>Para além disso, este site também apresenta algumas informações dos veículos (e.x. se têm uma porta avariada...), através de contribuições dos utilizadores deste site.</p>
+            <br>
+            <h2>Como é que surgiu esta ideia?</h2>
+            <p>Este projeto começou como um bot do discord que via quando é que os autocarros começavam/terminavam o serviço, com o objetivo de ver se, de facto, as linhas com menos serviços (e.x. a <span class="line" style="background-color: #C61D23">1122</span>) de facto circulavam. Logo aqui, tive de lidar com problemas da API (pois havia veículos que "desapareciam" por uns minutos e o bot assumia que tinham terminado o serviço).<br><br>Este bot evoluíu, passando a enviar avisos quando um autocarro que apanho diáriamente chegava à paragem X. A partir desta funcionalidade, fui expandindo o bot, criado um comando que me mostrasse as informações de qualquer paragem.<br>(Descobri também nesta altura que os serviços rodoviários de substituição da CP estão, internamente, registados como sendo parte da Linha <span class="line" style="background-color: #2A9057;">1998</span>.)<br><br>A partir daqui, adicionei outro comando que me permitia ver todos os veículos a circular numa determinada linha e foi aqui que comecei a associar o ID do veículo (o número preto/branco que se encontra na parte da frente/de trás do autocarro) com o tipo de veículo.<br><br>Este bot viria a tornar-se bastante útil, tanto para mim como para uns amigos meus e, por isso, decidi criar este site, disponibilizando assim os meus conhecimentos da API da CMetropolitana para qualquer pessoa que possa vir a precisar.</p>
+            <br>
+            <h2>Este projeto pertence à CMetropolitana?</h2>
+            <p><strong>Não</strong>, este projeto é completamente independente da CMetropolitana e da TML, utilizando apenas a API pública disponibilizada pela CMetropolitana e os meus conhecimentos dos serviços.</p>
+            <br>
+            <h2>Porque é que este site só funciona na Z1?</h2>
+            <p>Tecnicamente, este site poderia funcionar com as 4 zonas da CMetropolitana, contudo, dado que eu só conheço os serviços (e autocarros) da Zona 1, optei por excluir as outras 3 zonas deste site.<br>Para além disso, as outras 3 zonas têm veículos completamente diferentes, e são operadas por outros operadores com os quais não estou familiarizado (em vez da Viação Alvorada, que resultou da junção da Vimeca/LT, dos autocarros municipais de Oeiras e da Scotturb). <br><br>Nas paragens em que há autocarros das duas zonas (e.x. em Lisboa ou na Ericeira), optei por mostrar os veículos das outras zonas com uma cor diferente (e sem informações do tipo de veículo/chegada prevista), embora 99% dos utilizadores deste site provavelmente nunca se vão deparar com estes casos extremos.    </p>
+            <br>
+            <h2>Tenho uma questão/reclamação/sugestão</h2>
+            <p>Se tiver qualquer questão sobre o site (quer seja técnica ou não), alguma reclamação ou alguma sugestão, esteja à vontade para entrar em contacto pelo <a href="https://discord.com/users/896732255534338078" target="_blank">Discord</a>, <a href="https://github.com/Movs22/" target="_blank">Github</a> ou por <a href="mailto:github.movies22@gmail.com" target="_blank">email</a>!</p>
+            <br>
+            <br>
+            <h3>Muito obrigado por utilizar este site!</h3>
+            <buttn onclick="window.location.href = '/cmetropolitana/'" class="main">Ver paragens</buttn>
         </div>
     </div>
-    <div class="search">
-        <div class="autocomplete hidden" id="autocomplete"></div>
-        <input type="text" class="searchInput hidden" id="searchInput" placeholder="Escolha uma paragem"></input>
-        <div class="searchBtn" id="searchButton"><svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 24 24" 
-            width="24" 
-            height="24" 
-            fill="currentColor">
-            <path d="M10.5 2a8.5 8.5 0 1 0 6.314 14.267l5.404 5.404a1 1 0 0 0 1.415-1.415l-5.404-5.404A8.5 8.5 0 0 0 10.5 2zm0 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13z"/>
-        </svg></div>
-    </div>
-    <script src="/cmetropolitana/stop/search.js"></script>
-    <script>
-        let faq = {
-            "Este site pertence à CMetropolitana?": "<strong>Não</strong>, este site não é gerido ou da responsabilidade da CMetropolitana ou da TML. O site foi criado por um habitante local e utiliza os dados disponibilizados pela CMetropolitana através da sua <a href=\"https://github.com/carrismetropolitana/api\">API pública</a>.",
-            "Como é que o site funciona?": "Este síte é hospedado na GitHub Pages e utiliza HTML, JavaScript e CSS para apresentar o conteúdo (sendo que não existe um servidor back-end). Toda a informação apresentada é processada diretamente no dispositivo e obtida através da <a href=\"https://github.com/carrismetropolitana/api\">API pública</a> da CMetropolitana. Adicionalmente, no caso das paragens/horários completos, a informação é pré-processada e está disponível em <a href=\"https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana/patterns\">nesta pasta</a>. Pode ver e analizar o código fonte <a href=\"https://github.com/Movs22/movs22.github.io/tree/main/cmetropolitana\">no GitHub</a>.",
-            "Porque é que os horários/tempo de chegada diferem entre esta aplicação e o Google Maps?": "Os horários apresentados nesta página são obtidos diretamente da Carris Metropolitana enquanto que o Google Maps utiliza uns horários ligeiramente modificados, que nem sempre correspondem aos horários oficiais. Adicionalmente, os tempos de chegada neste site também são fornecidos pela CMetropolitana (ou, caso não existam), são calculados automaticamente no dispositivo. Embora na maioria dos casos corresponde aos tempos de chegada no Google Maps, às vezes pode aparecer com uma diferença de alguns minutos.*<br><br>*Tenha em conta que os autocarros que aparecem como \"Live\" no Google Maps (em vez de \"Early X mins\"/\"On time\") <strong>não</strong> têm informações sobre os atrasos e apresentam um horário baseado na localização atual do autocarro.",
-            "O que é um Autocarro de 3 portas/Carrinha/(...)?": "<ul><li>Um autocarro de 3 portas é um dos autocarros novos que, como o nome indica, tem 3 portas (1 na parte frontal, 1 na parte central e 1 na parte traseira).</li><li>Um autocarro de 2 portas é um dos autocarros da ex-Vimeca/ex-Scotturb que, como o nome indica, tem duas portas. (uma na frente e uma na parte central)</li><li>Uma carrinha é um autocarro mais pequeno (com 1 porta à frente e uma na traseira), geralmente utilizados em linhas circulares.</li></lu><br>O tipo de autocarro é obtido através do ID do veículo alocado ao serviço.",
-            "Como é que posso entrar em contacto com o responsável pelo site?": "Para entrar em contacto com o responsável deste site, deve contactá-lo pelo <a href=\"https://github.com/Movs22/movs22.github.io/tree/main\">GitHub</a> ou pelo <a href=\"https://discord.com/users/896732255534338078\">Discord</a>"
-        }
-
-        let prevSelected;
-        document.body.onload = () => {
-            Object.keys(faq).forEach(key => {
-                let div = document.createElement("div")
-                div.classList.add("service")
-                div.onclick = () => {
-                    if (div.classList.contains("selected")) {
-                        div.classList.remove("selected");
-                        prevSelected = undefined
-                        selectedVec = undefined
-                    } else {
-                        prevSelected ? prevSelected.classList.remove("selected") : null
-                        div.classList.add("selected")
-                        prevSelected = div;
-                        selectedVec = key
-                    }
-                }
-                div.innerHTML = "<div class=\"serviceUpper\"><p class=\"dest\"><strong>" + key + "</strong></p></div><div class=\"route\" style=\"text-align: left; border-radius: 15px; padding: 15px;\"><span>" + faq[key] + "</span></div>"
-                document.getElementById("services").appendChild(div)
-            })
-        }
-    </script>
-
 </body>
 
 </html>
