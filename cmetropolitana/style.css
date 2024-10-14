@@ -391,14 +391,14 @@ body {
 .warnings p {
     text-align: left;
     margin: 0px;
-    font-size: large;
+    font-size: medium;
     vertical-align: middle;
 }
 
 .warnings p::before {
     content: "⚠️";
     color: orange; 
-    font-size: large;
+    font-size: medium;
     margin: 0px;
     vertical-align: middle;
 }
