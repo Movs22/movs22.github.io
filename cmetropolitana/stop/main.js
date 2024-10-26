@@ -1,6 +1,9 @@
 let url = window.location.href.split("?id=")
 let stopId = url[1]
 
+window.location.href = "https://horarios-lx.github.io/partidas/?p=" + stopId;
+
+return;
 
 let vehicles;
 
@@ -95,12 +98,13 @@ async function fetchBuses(id, debug) {
     await Promise.all(fetchPromises)
 
     res.forEach(bus => {
-        let vehicle = vehicles.find(a => a.trip_id === bus.trip_id)
+        let vehicle = vehicles.find(a => a.trip_id === bus.trip_id || a.id === bus.vehicle_id)
         if(!bus.pattern_id.startsWith("1")) return;
         if (vehicle) {
             bus.currentLocation = vehicle.stop_id;
             if (!bus.estimated_arrival) {
                 let route = patternsCache[vehicle.pattern_id]
+                if(!route) return;
                 let rS = route.path.indexOf(route.path.find(a => a.id === vehicle.stop_id && a.index <= bus.stop_sequence))
                 let rE = route.path.indexOf(route.path.find(a => a.id === id && a.index === bus.stop_sequence))
                 bus.currentStopIndex = rS;
@@ -319,7 +323,7 @@ async function loadRoute(div, scrollTop, debug, prevMap, vehicle) {
 
     var busIcon = L.divIcon({
         className: "marker",
-        html: "<div class=\"marker2\" style=\"transform: translate(-50%, -50%) rotate(" + rotation + "deg) scale(50%)\">" + svg + "</div>",
+        html: "<div class=\"marker2\" style=\"rotate(" + rotation + "deg) scale(50%)\">" + svg + "</div>",
         iconSize: [8, 8], // Size of the icon
         iconAnchor: [0, 0] // The point of the icon which will correspond to marker's location
     });
