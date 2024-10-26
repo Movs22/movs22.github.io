@@ -3,7 +3,7 @@ let stopId = url[1]
 
 window.location.href = "https://horarios-lx.github.io/partidas/?p=" + stopId;
 
-return;
+/*return;
 
 let vehicles;
 
@@ -422,7 +422,7 @@ async function loadRoute(div, scrollTop, debug, prevMap, vehicle) {
         if (debug) {
             arrival = arrival + " " + stop.index + " | " + stop.schedule.travel_time + "mins | " + current_stop + " | " + stop_sequence + " | ID: " + stop.id + " | "
         }
-        stopDiv.innerHTML = "<p class=\"\">" + arrival + stop.name + /*lines +*/ "</p>"
+        stopDiv.innerHTML = "<p class=\"\">" + arrival + stop.name + /*lines +*//* "</p>"
         stopDiv.classList.add("stop")
         stopsDiv.appendChild(stopDiv)
     })
@@ -443,3 +443,4 @@ async function loadRoute(div, scrollTop, debug, prevMap, vehicle) {
         stopsDiv.scrollTop = scrollTop;
     }
 }
+*/
