@@ -1,5 +1,5 @@
 :root {
-    --accent: #ffdd01;
+    --accent: #d1cabc; /*#ffdd01;*/
     --white: #f0f0f0;
     --black: #000000;
     --secondary: #d0d0d0; 
@@ -625,7 +625,6 @@ body {
     display: flex;
     align-items: center;
     vertical-align: middle;
-    min-height: 2.5em;
     padding: 1.25em 0;
     justify-content: flex-start;
     box-sizing: border-box;
