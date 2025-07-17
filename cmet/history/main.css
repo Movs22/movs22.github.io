@@ -23,43 +23,49 @@ body {
 #timeframe {
     position: absolute;
     z-index: 10000;
-    background-color: white;
     bottom: 0;
     width: calc(100% - 1rem);
+    height: 10%;
+    background-color: #f0f0f07f;
     padding: .5rem;
+}
+
+#time {
+    font-size: 6vh;
+    margin: 0px;
+    padding: 0px;
+}
+
+#timeLabel {
+    font-size: 3vh;
+    margin: 0px;
+    padding: 0px;
+}
+
+#timeRange {
+    flex-grow: 1;
 }
 
 .line {
     background-color: black;
     border-radius: 1rem;
-    font-size: 1rem;
-    padding: .5rem;
+    font-size: 10px;
+    padding: 5px;
+    text-align: center;
     font-weight: bold;
     color: white;
     font-weight: bold;
 }
 
-#timeframe p {
-    margin: 0px;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
+.line.short {
+    background-color: #3d85c6;
 }
 
-#timeframe label {
-    line-height: 1rem;
+.line.long {
+    background-color: #c61d23;
 }
 
-#timeframe div {
-    background-color: red;
-    display: flex;
-    flex-direction: row;
+.line.cp {
+    background-color: #2a9057;
 }
 
-#timeframe div input {
-    flex-grow: 1;
-}
-
-#timeframe input {
-    line-height: 1rem;
-}

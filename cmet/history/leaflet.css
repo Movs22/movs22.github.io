@@ -31,7 +31,7 @@
 }
 /* Safari renders non-retina tile on retina better with this, but Chrome is worse */
 .leaflet-safari .leaflet-tile {
-	image-rendering: -webkit-optimize-contrast;
+	image-rendering: crisp-edges;
 	}
 /* hack that prevents hw layers "stretching" when loading new tiles */
 .leaflet-safari .leaflet-tile-container {
@@ -58,6 +58,8 @@
 	max-height: none !important;
 	width: auto;
 	padding: 0;
+	
+  image-rendering: pixelated;
 	}
 
 .leaflet-container img.leaflet-tile {

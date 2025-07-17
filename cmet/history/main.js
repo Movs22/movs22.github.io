@@ -12,16 +12,19 @@ document.body.onload = async () => {
         zoomControl: false,
         keepBuffer: 6,         // 🔥 preloads extra tile rows beyond view
         inertia: true,
-        minZoom: 10
-    }).setView([38.6932977, -9.3146746], 10);
+        minZoom: 10,
+        zoomSnap: 0
+    }).setView([38.81016045483458, -9.240360260009767], 12.8);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '',
-        maxNativeZoom: 18,
-        maxZoom: 19,
-        detectRetina: false,
-        reuseTiles: true,
-        tileSize: 256,
+        zoomOffset: 0,
+  zoomSnap: 0,
+  keepBuffer: 16,
+  edgeBufferTiles: 2,
+  updateWhenZooming: false,
+  updateWhenIdle: true,
+  detectRetina: false,
+  reuseTiles: true
     }).addTo(map);
 
     let timeControl = document.getElementById("timeRange")
@@ -52,13 +55,15 @@ document.body.onload = async () => {
 
 }
 
+let shortLines = ["1008","1009","1012","1015","1104","1109","1113","1114","1120","1124","1201","1204","1205","1210","1216","1221","1222","1226","1229","1230","1252","1501","1510","1511","1513","1524"]
+
 let currentMarkers = {}
 
 function updateMarkersForTime(time) {
     const data = vehicleData[time];
     const activeIDs = new Set();
 
-    document.getElementById("timeLabel").innerHTML = "Time - " + Object.keys(data).length + " vehicles"
+    document.getElementById("timeLabel").innerHTML = Object.keys(data).length + " veículos/vehicles"
 
     Object.keys(data).forEach(vehicle => {
         activeIDs.add(vehicle);
@@ -67,17 +72,17 @@ function updateMarkersForTime(time) {
             // Move existing marker
             currentMarkers[vehicle].setLatLng([data[vehicle][0], data[vehicle][1]]);
             currentMarkers[vehicle].setIcon(L.divIcon({
-                className: 'line',
-                html: `<div>${data[vehicle][2]}</div>`,
-                iconSize: [80, 15],
+                className: 'line ' + (shortLines.find(a => data[vehicle][2].startsWith(a)) ? "short" : (data[vehicle][2].startsWith("1998") ? "cp" : "long")),
+                html: `<div>${data[vehicle][2].replaceAll("1998","CP").split("_")[0]}</div>`,
+                iconSize: [30, 10],
             }));
         } else {
             // Create new marker
             const marker = L.marker([data[vehicle][0], data[vehicle][1]], {
                 icon: L.divIcon({
-                    className: 'line',
-                    html: `<div>${data[vehicle][2]}</div>`,
-                    iconSize: [80, 15]
+                    className: 'line ' + (shortLines.find(a => data[vehicle][2].startsWith(a)) ? "short" : (data[vehicle][2].startsWith("1998") ? "cp" : "long")),
+                    html: `<div>${data[vehicle][2].replaceAll("1998","CP").split("_")[0]}</div>`,
+                    iconSize: [30, 10]
                 })
             })
                 .addTo(map)
