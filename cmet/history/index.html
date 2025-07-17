@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./main.css" />
+    <script src="./leaflet.js"></script>
+    <script src="./leaflet.edgebuffer.js"></script>
+    <link rel="stylesheet" href="./leaflet.css" />
+    <script src="./log.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="timeframe">
+        <p id="timeLabel">Time</p>
+        <div style="display: flex; align-items: center; gap: 8px;">
+        <label id="time">04:00:00</label><input type="range" min="1" max="1" id="timeRange">
+        </div>
+    </div>
+    <script src="./main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+:root {
+    --accent: #ffdd01; /*#ffdd01;*/
+    --white: #f0f0f0;
+    --black: #000000;
+    --secondary: #d0d0d0; 
+    --route: #ececec;
+    --ontime: #3bb33b;
+    --delayed: #b33b3b;
+    --early: #b37b3b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--secondary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+footer {
+    background-color: #000000;
+    color: white;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    font-size: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+}
+
+footer a {
+    text-decoration: underline;
+    color: white;
+    font-weight: bold;
+}

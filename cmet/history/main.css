@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--white);
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f0f0f0;
+    touch-action: pan-x pan-y;
+}
+
+#timeframe {
+    position: absolute;
+    z-index: 10000;
+    background-color: white;
+    bottom: 0;
+    width: calc(100% - 1rem);
+    padding: .5rem;
+}
+
+.line {
+    background-color: black;
+    border-radius: 1rem;
+    font-size: 1rem;
+    padding: .5rem;
+    font-weight: bold;
+    color: white;
+    font-weight: bold;
+}
+
+#timeframe p {
+    margin: 0px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#timeframe label {
+    line-height: 1rem;
+}
+
+#timeframe div {
+    background-color: red;
+    display: flex;
+    flex-direction: row;
+}
+
+#timeframe div input {
+    flex-grow: 1;
+}
+
+#timeframe input {
+    line-height: 1rem;
+}
