@@ -46,6 +46,7 @@ body {
     flex-grow: 1;
 }
 
+
 .line {
     background-color: black;
     border-radius: 1rem;
@@ -67,5 +68,26 @@ body {
 
 .line.cp {
     background-color: #2a9057;
+}
+
+.line.open {
+    background-color: #000000;
+    color: yellow;
+   animation: flash 1s infinite steps(1, start);
+}
+
+
+
+@keyframes flash {
+  0% {
+   
+  }
+  50% {
+    background-color: #000000;
+    color: yellow;
+  }
+  100% {
+    
+  }
 }
 
